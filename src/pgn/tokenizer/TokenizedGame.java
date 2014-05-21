@@ -24,23 +24,23 @@ public class TokenizedGame {
     private ArrayList<MovePair> moves = new ArrayList<MovePair>();
 
     public static class MovePair {
-        private String first, second;
+        private String white, black;
 
         public MovePair(String first, String second) {
-            this.first = first;
-            this.second = second;
+            this.white = first;
+            this.black = second;
         }
 
         public MovePair(String first) { //no second - end of game!
-            this.first = first;
+            this.white = first;
         }
 
-        public String getFirst() {
-            return first;
+        public String getWhite() {
+            return white;
         }
 
-        public String getSecond() {
-            return second;
+        public String getBlack() {
+            return black;
         }
     }
 
@@ -136,7 +136,7 @@ public class TokenizedGame {
 
         int i=1;
         for(MovePair move : moves) {
-            result += "\n"+i+++". "+move.getFirst()+((move.getSecond()!=null) ? " : "+move.getSecond() : "");
+            result += "\n"+i+++". "+move.getWhite()+((move.getBlack()!=null) ? " : "+move.getBlack() : "");
         }
         return result;
     }
