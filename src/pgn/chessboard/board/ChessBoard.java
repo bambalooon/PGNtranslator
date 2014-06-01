@@ -91,10 +91,12 @@ public class ChessBoard implements Board {
                     Figure g1 = board[Rank._1.getValue()][File.g.getValue()];
                     rook = board[Rank._1.getValue()][File.h.getValue()];
                     if(king!=null && king.getLastPosition()==null && rook!=null && rook.getLastPosition()==null && f1==null && g1==null) { //if didn't move then they are king & rook
-                        board[Rank._1.getValue()][File.h.getValue()] = king;
-                        king.makeMove(new ChessMove(null, rook.getPosition(), null));
-                        board[Rank._1.getValue()][File.e.getValue()] = rook;
-                        rook.makeMove(new ChessMove(null, king.getLastPosition(), null));
+                        board[Rank._1.getValue()][File.h.getValue()] = null;
+                        board[Rank._1.getValue()][File.e.getValue()] = null;
+                        board[Rank._1.getValue()][File.g.getValue()] = king;
+                        king.makeMove(new ChessMove(null, new ChessPosition(File.g, Rank._1), null));
+                        board[Rank._1.getValue()][File.f.getValue()] = rook;
+                        rook.makeMove(new ChessMove(null, new ChessPosition(File.f, Rank._1), null));
                     }
                     else {
                         throw new IllegalArgumentException("Castling cannot be done!");
@@ -106,10 +108,12 @@ public class ChessBoard implements Board {
                     Figure g8 = board[Rank._8.getValue()][File.g.getValue()];
                     rook = board[Rank._8.getValue()][File.h.getValue()];
                     if(king!=null && king.getLastPosition()==null && rook!=null && rook.getLastPosition()==null && f8==null && g8==null) { //if didn't move then they are king & rook
-                        board[Rank._8.getValue()][File.h.getValue()] = king;
-                        king.makeMove(new ChessMove(null, rook.getPosition(), null));
-                        board[Rank._8.getValue()][File.e.getValue()] = rook;
-                        rook.makeMove(new ChessMove(null, king.getLastPosition(), null));
+                        board[Rank._8.getValue()][File.h.getValue()] = null;
+                        board[Rank._8.getValue()][File.e.getValue()] = null;
+                        board[Rank._8.getValue()][File.g.getValue()] = king;
+                        king.makeMove(new ChessMove(null, new ChessPosition(File.g, Rank._8), null));
+                        board[Rank._8.getValue()][File.f.getValue()] = rook;
+                        rook.makeMove(new ChessMove(null, new ChessPosition(File.f, Rank._8), null));
                     }
                     else {
                         throw new IllegalArgumentException("Castling cannot be done!");
@@ -128,10 +132,12 @@ public class ChessBoard implements Board {
                     Figure b1 = board[Rank._1.getValue()][File.b.getValue()];
                     rook = board[Rank._1.getValue()][File.a.getValue()];
                     if(king!=null && king.getLastPosition()==null && rook!=null && rook.getLastPosition()==null && b1==null && c1==null && d1==null) { //if didn't move then they are king & rook
-                        board[Rank._1.getValue()][File.a.getValue()] = king;
-                        king.makeMove(new ChessMove(null, rook.getPosition(), null));
-                        board[Rank._1.getValue()][File.e.getValue()] = rook;
-                        rook.makeMove(new ChessMove(null, king.getLastPosition(), null));
+                        board[Rank._1.getValue()][File.a.getValue()] = null;
+                        board[Rank._1.getValue()][File.e.getValue()] = null;
+                        board[Rank._1.getValue()][File.c.getValue()] = king;
+                        king.makeMove(new ChessMove(null, new ChessPosition(File.c, Rank._1), null));
+                        board[Rank._1.getValue()][File.d.getValue()] = rook;
+                        rook.makeMove(new ChessMove(null, new ChessPosition(File.d, Rank._1), null));
                     }
                     else {
                         throw new IllegalArgumentException("Castling cannot be done!");
@@ -144,10 +150,12 @@ public class ChessBoard implements Board {
                     Figure b8 = board[Rank._8.getValue()][File.b.getValue()];
                     rook = board[Rank._8.getValue()][File.a.getValue()];
                     if(king!=null && king.getLastPosition()==null && rook!=null && rook.getLastPosition()==null && b8==null && c8==null && d8==null) { //if didn't move then they are king & rook
-                        board[Rank._8.getValue()][File.a.getValue()] = king;
-                        king.makeMove(new ChessMove(null, rook.getPosition(), null));
-                        board[Rank._8.getValue()][File.e.getValue()] = rook;
-                        rook.makeMove(new ChessMove(null, king.getLastPosition(), null));
+                        board[Rank._8.getValue()][File.a.getValue()] = null;
+                        board[Rank._8.getValue()][File.e.getValue()] = null;
+                        board[Rank._8.getValue()][File.c.getValue()] = king;
+                        king.makeMove(new ChessMove(null, new ChessPosition(File.c, Rank._8), null));
+                        board[Rank._8.getValue()][File.d.getValue()] = rook;
+                        rook.makeMove(new ChessMove(null, new ChessPosition(File.d, Rank._8), null));
                     }
                     else {
                         throw new IllegalArgumentException("Castling cannot be done!");
