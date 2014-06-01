@@ -1,7 +1,6 @@
 package pgn.chessboard.board;
 
-import pgn.chessboard.figures.Bishop;
-import pgn.chessboard.figures.Figure;
+import pgn.chessboard.figures.*;
 import pgn.chessboard.players.ChessPlayer;
 
 import java.util.ArrayList;
@@ -109,6 +108,61 @@ public class ChessBoard implements Board {
     }
 
     protected void initBoard() {
+        //WHITE
+        //Rooks
+        Rook rook = new Rook(this, ChessPlayer.WHITE, new ChessPosition(File.a, Rank._1));
+        board[Rank._1.getValue()][File.a.getValue()] = rook;
+        rook = new Rook(this, ChessPlayer.WHITE, new ChessPosition(File.h, Rank._1));
+        board[Rank._1.getValue()][File.h.getValue()] = rook;
+        //Knights
+        Knight knight = new Knight(this, ChessPlayer.WHITE, new ChessPosition(File.b, Rank._1));
+        board[Rank._1.getValue()][File.b.getValue()] = knight;
+        knight = new Knight(this, ChessPlayer.WHITE, new ChessPosition(File.g, Rank._1));
+        board[Rank._1.getValue()][File.g.getValue()] = knight;
+        //Bishops
+        Bishop bishop = new Bishop(this, ChessPlayer.WHITE, new ChessPosition(File.c, Rank._1));
+        board[Rank._1.getValue()][File.c.getValue()] = bishop;
+        bishop = new Bishop(this, ChessPlayer.WHITE, new ChessPosition(File.f, Rank._1));
+        board[Rank._1.getValue()][File.f.getValue()] = bishop;
+        //Queen
+        Queen queen = new Queen(this, ChessPlayer.WHITE, new ChessPosition(File.d, Rank._1));
+        board[Rank._1.getValue()][File.d.getValue()] = queen;
+        //King
+        King king = new King(this, ChessPlayer.WHITE, new ChessPosition(File.e, Rank._1));
+        board[Rank._1.getValue()][File.e.getValue()] = king;
+        //Pawns
+        for(File file : File.values()) {
+            Pawn pawn = new Pawn(this, ChessPlayer.WHITE, new ChessPosition(file, Rank._2));
+            board[Rank._2.getValue()][file.getValue()] = pawn;
+        }
+
+        //BLACK
+        //Rooks
+        rook = new Rook(this, ChessPlayer.BLACK, new ChessPosition(File.a, Rank._8));
+        board[Rank._8.getValue()][File.a.getValue()] = rook;
+        rook = new Rook(this, ChessPlayer.BLACK, new ChessPosition(File.h, Rank._8));
+        board[Rank._8.getValue()][File.h.getValue()] = rook;
+        //Knights
+        knight = new Knight(this, ChessPlayer.BLACK, new ChessPosition(File.b, Rank._8));
+        board[Rank._8.getValue()][File.b.getValue()] = knight;
+        knight = new Knight(this, ChessPlayer.BLACK, new ChessPosition(File.g, Rank._8));
+        board[Rank._8.getValue()][File.g.getValue()] = knight;
+        //Bishops
+        bishop = new Bishop(this, ChessPlayer.BLACK, new ChessPosition(File.c, Rank._8));
+        board[Rank._8.getValue()][File.c.getValue()] = bishop;
+        bishop = new Bishop(this, ChessPlayer.BLACK, new ChessPosition(File.f, Rank._8));
+        board[Rank._8.getValue()][File.f.getValue()] = bishop;
+        //Queen
+        queen = new Queen(this, ChessPlayer.BLACK, new ChessPosition(File.d, Rank._8));
+        board[Rank._8.getValue()][File.d.getValue()] = queen;
+        //King
+        king = new King(this, ChessPlayer.BLACK, new ChessPosition(File.e, Rank._8));
+        board[Rank._8.getValue()][File.e.getValue()] = king;
+        //Pawns
+        for(File file : File.values()) {
+            Pawn pawn = new Pawn(this, ChessPlayer.BLACK, new ChessPosition(file, Rank._7));
+            board[Rank._7.getValue()][file.getValue()] = pawn;
+        }
 
     }
 

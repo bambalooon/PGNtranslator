@@ -17,6 +17,14 @@ public abstract class Figure {
     protected Board.Position position;
     protected Board.Position lastPosition = null; //for pawns, castling, etc.
 
+    public Figure(Board board, ChessPlayer owner, Board.Position position) {
+        this.board = board;
+        this.owner = owner;
+        this.position = position;
+    }
+
+    public abstract boolean isMovePossible(ChessMove move); //to find moving figure
+
     public void makeMove(ChessMove move) throws IllegalArgumentException {
         if(isMovePossible(move)) {
             lastPosition = this.position;
@@ -25,7 +33,6 @@ public abstract class Figure {
         }
         throw new IllegalArgumentException("Move not possible!");
     }
-    public abstract boolean isMovePossible(ChessMove move); //to find moving figure
 
     public ChessPlayer getOwner() {
         return owner;

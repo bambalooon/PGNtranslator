@@ -2,6 +2,7 @@ package pgn.chessboard.figures;
 
 import pgn.chessboard.board.Board;
 import pgn.chessboard.board.ChessMove;
+import pgn.chessboard.players.ChessPlayer;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,6 +12,10 @@ import pgn.chessboard.board.ChessMove;
  * To change this template use File | Settings | File Templates.
  */
 public class Knight extends Figure {
+
+    public Knight(Board board, ChessPlayer owner, Board.Position position) {
+        super(board, owner, position);
+    }
 
     public boolean isMovePossible(ChessMove move) {
         int xAbsDist = Math.abs(move.getTargetPosition().getX().getValue()-this.position.getX().getValue());

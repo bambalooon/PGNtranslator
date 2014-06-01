@@ -3,6 +3,7 @@ package pgn.chessboard.figures;
 import pgn.chessboard.board.Board;
 import pgn.chessboard.board.ChessBoard;
 import pgn.chessboard.board.ChessMove;
+import pgn.chessboard.players.ChessPlayer;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,6 +13,10 @@ import pgn.chessboard.board.ChessMove;
  * To change this template use File | Settings | File Templates.
  */
 public class Rook extends Figure {
+
+    public Rook(Board board, ChessPlayer owner, Board.Position position) {
+        super(board, owner, position);
+    }
 
     public boolean isMovePossible(ChessMove move) {
         int xdist = move.getTargetPosition().getX().getValue()-this.position.getX().getValue();

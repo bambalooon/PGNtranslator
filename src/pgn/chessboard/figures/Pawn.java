@@ -13,6 +13,10 @@ import pgn.chessboard.players.ChessPlayer;
  */
 public class Pawn extends Figure {
 
+    public Pawn(Board board, ChessPlayer owner, Board.Position position) {
+        super(board, owner, position);
+    }
+
     public boolean isMovePossible(ChessMove move) {
         int xdist = move.getTargetPosition().getX().getValue()-this.position.getX().getValue();
         int ydist = move.getTargetPosition().getY().getValue()-this.position.getY().getValue();
