@@ -25,13 +25,10 @@ public abstract class Figure {
 
     public abstract boolean isMovePossible(ChessMove move); //to find moving figure
 
-    public void makeMove(ChessMove move) throws IllegalArgumentException {
-        if(isMovePossible(move)) {
-            lastPosition = this.position;
-            position = move.getTargetPosition();
-            return; //handler knows to make move!
-        }
-        throw new IllegalArgumentException("Move not possible!");
+    public void makeMove(ChessMove move) {
+        lastPosition = this.position;
+        position = move.getTargetPosition();
+        //no throwing because other function checks correctness
     }
 
     public ChessPlayer getOwner() {

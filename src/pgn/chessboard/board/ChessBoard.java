@@ -83,8 +83,11 @@ public class ChessBoard implements Board {
                 throw new IllegalArgumentException("Capturing your own piece or nothing!");
             }
         }
+        Position pos = figure.getPosition();
+        Position targetPos = move.getTargetPosition();
+        board[pos.getY().getValue()][pos.getX().getValue()] = null;
         figure.makeMove(move);
-        //move pieces on board!!!
+        board[targetPos.getY().getValue()][targetPos.getX().getValue()] = figure;
     }
 
     protected Figure findFigure(Figure figure, ChessMove move) throws IllegalArgumentException {
