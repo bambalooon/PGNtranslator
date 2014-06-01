@@ -3,6 +3,7 @@ package pgn.chessboard.figures;
 import pgn.chessboard.board.Board;
 import pgn.chessboard.board.ChessBoard;
 import pgn.chessboard.board.ChessMove;
+import pgn.chessboard.board.PositionFixer;
 import pgn.chessboard.players.ChessPlayer;
 
 /**
@@ -18,10 +19,27 @@ public class Pawn extends Figure {
         super(board, owner, position);
     }
 
+    @Override
+    public void makeMove(ChessMove move) {
+        if(move.getTargetPosition().getY()==null) {
+            int y = this.position.getY().getValue();
+            if(this.owner==ChessPlayer.WHITE) {
+                y++;
+            }
+            else {
+                y--;
+            }
+            if(move.getTargetPosition() instanceof ChessBoard.ChessPosition) {
+                ChessBoard.ChessPosition pos = (ChessBoard.ChessPosition) move.getTargetPosition();
+                PositionFixer.fixPosition(pos, pos.getX().getValue(), y);
+            }
+        }
+        super.makeMove(move);
+    }
+
     public boolean isMovePossible(ChessMove move) {
-        int xdist = move.getTargetPosition().getX().getValue()-this.position.getX().getValue();
-        int ydist = move.getTargetPosition().getY().getValue()-this.position.getY().getValue();
         if(move.getType()==ChessMove.MoveType.NORMAL && this.position.getX()==move.getTargetPosition().getX()) { //sa w tej samej kolumnie i to normalny ruch
+            int ydist = move.getTargetPosition().getY().getValue()-this.position.getY().getValue();
             if(board.checkPosition(move.getTargetPosition())!=null) {
                 return false;
             }
@@ -48,19 +66,40 @@ public class Pawn extends Figure {
                     return false;
             }
         }
-        else if(move.getType()== ChessMove.MoveType.CAPTURE) {
+        else if(move.getType()== ChessMove.MoveType.CAPTURE) {   //OR EN PASSANTE!
+            int xdist = move.getTargetPosition().getX().getValue()-this.position.getX().getValue();
             if(xdist==1 || xdist==-1) {
-                switch (move.getPlayer()) {
-                    case WHITE:
-                        if(ydist==1) {
+                if(move.getTargetPosition().getY()!=null) {
+                    int ydist = move.getTargetPosition().getY().getValue()-this.position.getY().getValue();
+                    switch (move.getPlayer()) {
+                        case WHITE:
+                            if(ydist!=1) {
+                                return false;
+                            }
+                            break;
+                        case BLACK:
+                            if(ydist!=-1) {
+                                return false;
+                            }
+                            break;
+                    }
+                }
+                Figure fig = board.checkPosition(move.getTargetPosition());
+                if(fig==null) { //el passante! - check if last move was 2-jump
+                    Figure jumper = board.checkPosition(
+                        new ChessBoard.ChessPosition(
+                            move.getTargetPosition().getX(), this.position.getY()
+                        )
+                    );
+                    if(jumper!=null && jumper instanceof Pawn) { //there has to be pawn!!!
+                        int distX = jumper.getPosition().getX().getValue()-jumper.getLastPosition().getX().getValue();
+                        int distY = jumper.getPosition().getY().getValue()-jumper.getLastPosition().getY().getValue();
+                        if(distX==0 && ((jumper.getOwner()==ChessPlayer.WHITE && distY==2) || (jumper.getOwner()==ChessPlayer.BLACK && distY==-2))) {
+                            //good el passante move
                             return true;
                         }
-                        return false;
-                    case BLACK:
-                        if(ydist==-1) {
-                            return true;
-                        }
-                        return false;
+                    }
+                    return false;
                 }
             }
         }

@@ -57,6 +57,11 @@ public class ChessBoard implements Board {
         public Row getY() {
             return y;
         }
+
+        protected void fixPosition(int x, int y) { //special method for pawn attack
+            this.x = File.values()[x];
+            this.y = Rank.values()[y];
+        }
     }
 
     private static final int WIDTH = File.values().length;
@@ -160,9 +165,10 @@ public class ChessBoard implements Board {
                 }
             }
             Position pos = figure.getPosition();
-            Position targetPos = move.getTargetPosition();
-            board[pos.getY().getValue()][pos.getX().getValue()] = null;
+            Position targetPos = move.getTargetPosition();       //what if it's pawn attach? there is no Rank!!!!!
             figure.makeMove(move);
+            board[pos.getY().getValue()][pos.getX().getValue()] = null;
+
             board[targetPos.getY().getValue()][targetPos.getX().getValue()] = figure;
         }
     }
