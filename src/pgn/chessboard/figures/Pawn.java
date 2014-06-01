@@ -1,6 +1,7 @@
 package pgn.chessboard.figures;
 
 import pgn.chessboard.board.Board;
+import pgn.chessboard.board.ChessBoard;
 import pgn.chessboard.board.ChessMove;
 import pgn.chessboard.players.ChessPlayer;
 
@@ -21,12 +22,16 @@ public class Pawn extends Figure {
         int xdist = move.getTargetPosition().getX().getValue()-this.position.getX().getValue();
         int ydist = move.getTargetPosition().getY().getValue()-this.position.getY().getValue();
         if(move.getType()==ChessMove.MoveType.NORMAL && this.position.getX()==move.getTargetPosition().getX()) { //sa w tej samej kolumnie i to normalny ruch
+            if(board.checkPosition(move.getTargetPosition())!=null) {
+                return false;
+            }
             switch(move.getPlayer()) {
                 case WHITE:
                     switch (ydist) {
                         case 1: return true;
                         case 2:
-                            if(this.lastPosition==null) {  //leap through 2 only possible at first move!
+                            if(this.lastPosition==null
+                                    && board.checkPosition(new ChessBoard.ChessPosition(position.getX().getValue(), position.getY().getValue()+1))==null) {  //leap through 2 only possible at first move!
                                 return true;
                             }
                     }
@@ -35,7 +40,8 @@ public class Pawn extends Figure {
                     switch (ydist) {
                         case -1: return true;
                         case -2:
-                            if(this.lastPosition==null) {
+                            if(this.lastPosition==null
+                                    && board.checkPosition(new ChessBoard.ChessPosition(position.getX().getValue(), position.getY().getValue()-1))==null) {
                                 return true;
                             }
                     }

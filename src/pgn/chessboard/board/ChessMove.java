@@ -14,11 +14,17 @@ public class ChessMove {
     private Board.Position targetPosition;
     private MoveType type;
     private ChessPlayer player;
+    private PawnPromotion promotion;
 
     public ChessMove(ChessPlayer player, Board.Position position, MoveType type) {  //for castling position and figure should be null
         this.player = player;
         this.targetPosition = position;
         this.type = type;
+    }
+
+    public ChessMove(ChessPlayer player, Board.Position position, MoveType type, PawnPromotion promotion) {
+        this(player, position, type);
+        this.promotion = promotion;
     }
 
     public ChessPlayer getPlayer() {
