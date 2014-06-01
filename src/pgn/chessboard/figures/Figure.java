@@ -14,6 +14,7 @@ public abstract class Figure {
     protected ChessPlayer owner;
     protected Board.Position position;
 
+    public abstract void makeMove(Board.Position position) throws IllegalArgumentException;
 
     public ChessPlayer getOwner() {
         return owner;

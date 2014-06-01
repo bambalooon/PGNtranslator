@@ -36,16 +36,16 @@ public class ChessBoard implements Board {
             return value;
         }
     };
-    public static class Position implements Board.Position {
+    public static class ChessPosition implements Position {
         Column x;
         Row y;
 
-        public Position(int x, int y) {
+        public ChessPosition(int x, int y) {
             this.x = Column.values()[x];
             this.y = Row.values()[y];
         }
 
-        public Position(Column x, Row y) {
+        public ChessPosition(Column x, Row y) {
             this.x = x;
             this.y = y;
         }

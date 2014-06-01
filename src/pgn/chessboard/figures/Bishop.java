@@ -1,5 +1,7 @@
 package pgn.chessboard.figures;
 
+import pgn.chessboard.board.Board;
+
 /**
  * Created with IntelliJ IDEA.
  * User: BamBalooon
@@ -8,6 +10,10 @@ package pgn.chessboard.figures;
  * To change this template use File | Settings | File Templates.
  */
 public class Bishop extends Figure {
+
+    public void makeMove(Board.Position position) throws IllegalArgumentException {
+        return;
+    }
 
     @Override
     public boolean equals(Object object) {
