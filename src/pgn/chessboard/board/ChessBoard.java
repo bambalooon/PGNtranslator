@@ -71,23 +71,23 @@ public class ChessBoard implements Board {
     }
 
     @Override
-    public Figure findFigure(Figure figure) throws IllegalArgumentException {
-        int matched_count = 0;
-        Figure matched = null;
+    public Figure findFigure(Figure figure, ChessMove move) throws IllegalArgumentException {
+        boolean matched = false;
+        Figure matchedFigure = null;
         for(Figure[] cols : board) {
             for (Figure fig : cols) {
-                if(fig.equals(figure)) {
-                    matched = fig;
-                    matched_count++;
+                if(fig.equals(figure) && fig.isMovePossible(move)) {
+                    if(matched) {
+                        throw new IllegalArgumentException("Condition not explicit! Too many matched figures!");
+                    }
+                    matchedFigure = fig;
+                    matched = true;
                 }
             }
         }
-        if(matched==null) {
+        if(matchedFigure==null) {
             throw new IllegalArgumentException("No figure matched!");
         }
-        else if(matched_count>1) {
-            throw new IllegalArgumentException("Condition not explicit! Too many matched figures!");
-        }
-        return matched;
+        return matchedFigure;
     }
 }

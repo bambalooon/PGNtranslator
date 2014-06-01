@@ -1,6 +1,7 @@
 package pgn.chessboard.figures;
 
 import pgn.chessboard.board.Board;
+import pgn.chessboard.board.ChessMove;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,6 +14,10 @@ public class Knight extends Figure {
 
     public void makeMove(Board.Position position) throws IllegalArgumentException {
         return;
+    }
+
+    public boolean isMovePossible(ChessMove move) {
+        return true;
     }
 
     @Override

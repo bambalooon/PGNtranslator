@@ -21,6 +21,6 @@ public interface Board {
         public Row getY();
     }
     Figure checkPosition(Position position);
-    Figure findFigure(Figure figure) throws IllegalArgumentException;
+    Figure findFigure(Figure figure, ChessMove move) throws IllegalArgumentException;
 
 }

@@ -1,6 +1,7 @@
 package pgn.chessboard.figures;
 
 import pgn.chessboard.board.Board;
+import pgn.chessboard.board.ChessMove;
 import pgn.chessboard.players.ChessPlayer;
 
 /**
@@ -23,6 +24,8 @@ public abstract class Figure {
     public Board.Position getPosition() {
         return position;
     }
+
+    public abstract boolean isMovePossible(ChessMove move);
 
     @Override
     public boolean equals(Object object) {
