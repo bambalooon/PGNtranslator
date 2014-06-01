@@ -39,6 +39,10 @@ public abstract class Figure {
         return position;
     }
 
+    public Board.Position getLastPosition() {
+        return lastPosition;
+    }
+
     @Override
     public boolean equals(Object object) {
         if(object instanceof Figure) {

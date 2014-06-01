@@ -22,6 +22,6 @@ public interface Board {
     }
 
     Figure checkPosition(Position position);
-    void makeMove(Figure figure, ChessMove move) throws IllegalArgumentException;
+    void makeMove(Figure figure, ChessMove move) throws IllegalArgumentException; //only user method!!!
 
 }

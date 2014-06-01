@@ -10,12 +10,12 @@ import pgn.chessboard.players.ChessPlayer;
  * To change this template use File | Settings | File Templates.
  */
 public class ChessMove {
-    public enum MoveType { NORMAL, CAPTURE }
+    public enum MoveType { NORMAL, CAPTURE, KINGSIDECASTLING, QUEENSIDECASTLING }
     private Board.Position targetPosition;
     private MoveType type;
     private ChessPlayer player;
 
-    public ChessMove(ChessPlayer player, Board.Position position, MoveType type) {
+    public ChessMove(ChessPlayer player, Board.Position position, MoveType type) {  //for castling position and figure should be null
         this.player = player;
         this.targetPosition = position;
         this.type = type;

@@ -75,19 +75,96 @@ public class ChessBoard implements Board {
     }
 
     @Override
-    public void makeMove(Figure figure, ChessMove move) throws IllegalArgumentException {
-        figure = findFigure(figure, move);
-        if(move.getType()== ChessMove.MoveType.CAPTURE) { //check if it's correct capture
-            Figure captured = checkPosition(move.getTargetPosition());
-            if(captured==null || captured.getOwner()==figure.getOwner()) {
-                throw new IllegalArgumentException("Capturing your own piece or nothing!");
+    public void makeMove(Figure figure, ChessMove move) throws IllegalArgumentException {  //for castling figure & position should be null
+        if(move.getType() == ChessMove.MoveType.KINGSIDECASTLING) {
+            Figure king;
+            Figure rook;
+            switch (move.getPlayer()) {
+                case WHITE:
+                    king = board[Rank._1.getValue()][File.e.getValue()];
+                    Figure f1 = board[Rank._1.getValue()][File.f.getValue()];
+                    Figure g1 = board[Rank._1.getValue()][File.g.getValue()];
+                    rook = board[Rank._1.getValue()][File.h.getValue()];
+                    if(king!=null && king.getLastPosition()==null && rook!=null && rook.getLastPosition()==null && f1==null && g1==null) { //if didn't move then they are king & rook
+                        board[Rank._1.getValue()][File.h.getValue()] = king;
+                        king.makeMove(new ChessMove(null, rook.getPosition(), null));
+                        board[Rank._1.getValue()][File.e.getValue()] = rook;
+                        rook.makeMove(new ChessMove(null, king.getLastPosition(), null));
+                    }
+                    else {
+                        throw new IllegalArgumentException("Castling cannot be done!");
+                    }
+                    return;
+                case BLACK:
+                    king = board[Rank._8.getValue()][File.e.getValue()];
+                    Figure f8 = board[Rank._8.getValue()][File.f.getValue()];
+                    Figure g8 = board[Rank._8.getValue()][File.g.getValue()];
+                    rook = board[Rank._8.getValue()][File.h.getValue()];
+                    if(king!=null && king.getLastPosition()==null && rook!=null && rook.getLastPosition()==null && f8==null && g8==null) { //if didn't move then they are king & rook
+                        board[Rank._8.getValue()][File.h.getValue()] = king;
+                        king.makeMove(new ChessMove(null, rook.getPosition(), null));
+                        board[Rank._8.getValue()][File.e.getValue()] = rook;
+                        rook.makeMove(new ChessMove(null, king.getLastPosition(), null));
+                    }
+                    else {
+                        throw new IllegalArgumentException("Castling cannot be done!");
+                    }
+                    return;
             }
         }
-        Position pos = figure.getPosition();
-        Position targetPos = move.getTargetPosition();
-        board[pos.getY().getValue()][pos.getX().getValue()] = null;
-        figure.makeMove(move);
-        board[targetPos.getY().getValue()][targetPos.getX().getValue()] = figure;
+        else if(move.getType() == ChessMove.MoveType.QUEENSIDECASTLING) {
+            Figure king;
+            Figure rook;
+            switch (move.getPlayer()) {
+                case WHITE:
+                    king = board[Rank._1.getValue()][File.e.getValue()];
+                    Figure d1 = board[Rank._1.getValue()][File.d.getValue()];
+                    Figure c1 = board[Rank._1.getValue()][File.c.getValue()];
+                    Figure b1 = board[Rank._1.getValue()][File.b.getValue()];
+                    rook = board[Rank._1.getValue()][File.a.getValue()];
+                    if(king!=null && king.getLastPosition()==null && rook!=null && rook.getLastPosition()==null && b1==null && c1==null && d1==null) { //if didn't move then they are king & rook
+                        board[Rank._1.getValue()][File.a.getValue()] = king;
+                        king.makeMove(new ChessMove(null, rook.getPosition(), null));
+                        board[Rank._1.getValue()][File.e.getValue()] = rook;
+                        rook.makeMove(new ChessMove(null, king.getLastPosition(), null));
+                    }
+                    else {
+                        throw new IllegalArgumentException("Castling cannot be done!");
+                    }
+                    return;
+                case BLACK:
+                    king = board[Rank._8.getValue()][File.e.getValue()];
+                    Figure d8 = board[Rank._8.getValue()][File.d.getValue()];
+                    Figure c8 = board[Rank._8.getValue()][File.c.getValue()];
+                    Figure b8 = board[Rank._8.getValue()][File.b.getValue()];
+                    rook = board[Rank._8.getValue()][File.a.getValue()];
+                    if(king!=null && king.getLastPosition()==null && rook!=null && rook.getLastPosition()==null && b8==null && c8==null && d8==null) { //if didn't move then they are king & rook
+                        board[Rank._8.getValue()][File.a.getValue()] = king;
+                        king.makeMove(new ChessMove(null, rook.getPosition(), null));
+                        board[Rank._8.getValue()][File.e.getValue()] = rook;
+                        rook.makeMove(new ChessMove(null, king.getLastPosition(), null));
+                    }
+                    else {
+                        throw new IllegalArgumentException("Castling cannot be done!");
+                    }
+                    return;
+            }
+
+        }
+        else {
+            figure = findFigure(figure, move);
+            if(move.getType()== ChessMove.MoveType.CAPTURE) { //check if it's correct capture
+                Figure captured = checkPosition(move.getTargetPosition());
+                if(captured==null || captured.getOwner()==figure.getOwner()) {
+                    throw new IllegalArgumentException("Capturing your own piece or nothing!");
+                }
+            }
+            Position pos = figure.getPosition();
+            Position targetPos = move.getTargetPosition();
+            board[pos.getY().getValue()][pos.getX().getValue()] = null;
+            figure.makeMove(move);
+            board[targetPos.getY().getValue()][targetPos.getX().getValue()] = figure;
+        }
     }
 
     protected Figure findFigure(Figure figure, ChessMove move) throws IllegalArgumentException {
