@@ -12,10 +12,20 @@ import pgn.chessboard.players.ChessPlayer;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class Figure {
+    protected Board board;
     protected ChessPlayer owner;
     protected Board.Position position;
+    protected Board.Position lastPosition = null; //for pawns, castling, etc.
 
-    public abstract void makeMove(Board.Position position) throws IllegalArgumentException;
+    public void makeMove(ChessMove move) throws IllegalArgumentException {
+        if(isMovePossible(move)) {
+            lastPosition = this.position;
+            position = move.getTargetPosition();
+            return; //handler knows to make move!
+        }
+        throw new IllegalArgumentException("Move not possible!");
+    }
+    public abstract boolean isMovePossible(ChessMove move); //to find moving figure
 
     public ChessPlayer getOwner() {
         return owner;
@@ -24,8 +34,6 @@ public abstract class Figure {
     public Board.Position getPosition() {
         return position;
     }
-
-    public abstract boolean isMovePossible(ChessMove move);
 
     @Override
     public boolean equals(Object object) {

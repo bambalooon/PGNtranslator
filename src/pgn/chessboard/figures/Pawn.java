@@ -2,6 +2,7 @@ package pgn.chessboard.figures;
 
 import pgn.chessboard.board.Board;
 import pgn.chessboard.board.ChessMove;
+import pgn.chessboard.players.ChessPlayer;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,12 +13,48 @@ import pgn.chessboard.board.ChessMove;
  */
 public class Pawn extends Figure {
 
-    public void makeMove(Board.Position position) throws IllegalArgumentException {
-        return;
-    }
-
     public boolean isMovePossible(ChessMove move) {
-        return true;
+        int xdist = move.getTargetPosition().getX().getValue()-this.position.getX().getValue();
+        int ydist = move.getTargetPosition().getY().getValue()-this.position.getY().getValue();
+        if(move.getType()==ChessMove.MoveType.NORMAL && this.position.getX()==move.getTargetPosition().getX()) { //sa w tej samej kolumnie i to normalny ruch
+            switch(move.getPlayer()) {
+                case WHITE:
+                    switch (ydist) {
+                        case 1: return true;
+                        case 2:
+                            if(this.lastPosition==null) {  //leap through 2 only possible at first move!
+                                return true;
+                            }
+                    }
+                    return false;
+                case BLACK:
+                    switch (ydist) {
+                        case -1: return true;
+                        case -2:
+                            if(this.lastPosition==null) {
+                                return true;
+                            }
+                    }
+                    return false;
+            }
+        }
+        else if(move.getType()== ChessMove.MoveType.CAPTURE) {
+            if(xdist==1 || xdist==-1) {
+                switch (move.getPlayer()) {
+                    case WHITE:
+                        if(ydist==1) {
+                            return true;
+                        }
+                        return false;
+                    case BLACK:
+                        if(ydist==-1) {
+                            return true;
+                        }
+                        return false;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

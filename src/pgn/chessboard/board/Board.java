@@ -20,7 +20,8 @@ public interface Board {
         public Column getX();
         public Row getY();
     }
+
     Figure checkPosition(Position position);
-    Figure findFigure(Figure figure, ChessMove move) throws IllegalArgumentException;
+    void makeMove(Figure figure, ChessMove move) throws IllegalArgumentException;
 
 }

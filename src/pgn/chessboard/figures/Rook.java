@@ -1,6 +1,7 @@
 package pgn.chessboard.figures;
 
 import pgn.chessboard.board.Board;
+import pgn.chessboard.board.ChessBoard;
 import pgn.chessboard.board.ChessMove;
 
 /**
@@ -12,11 +13,24 @@ import pgn.chessboard.board.ChessMove;
  */
 public class Rook extends Figure {
 
-    public void makeMove(Board.Position position) throws IllegalArgumentException {
-        return;
-    }
-
     public boolean isMovePossible(ChessMove move) {
+        int xdist = move.getTargetPosition().getX().getValue()-this.position.getX().getValue();
+        int ydist = move.getTargetPosition().getY().getValue()-this.position.getY().getValue();
+        if((xdist==0 && ydist==0) || (xdist!=0 && ydist!=0)) {
+            return false;
+        }
+        int xMove = (xdist!=0) ? ((xdist>0) ? 1 : -1) : 0;
+        int yMove = (ydist!=0) ? ((ydist>0) ? 1 : -1) : 0;
+        int destX = move.getTargetPosition().getX().getValue();
+        int destY = move.getTargetPosition().getY().getValue();
+        for(int x = this.position.getX().getValue(), y = this.position.getY().getValue() ;
+            x!=destX && y!=destY ;x+=xMove, y+=yMove) {
+
+            Figure figure = board.checkPosition(new ChessBoard.ChessPosition(x, y));
+            if(figure!=null && (x!=destX || y!=destY)) {
+                return false;
+            }
+        }
         return true;
     }
 

@@ -12,12 +12,16 @@ import pgn.chessboard.board.ChessMove;
  */
 public class King extends Figure {
 
-    public void makeMove(Board.Position position) throws IllegalArgumentException {
-        return;
-    }
-
     public boolean isMovePossible(ChessMove move) {
-        return true;
+        int xAbsDist = Math.abs(move.getTargetPosition().getX().getValue()-this.position.getX().getValue());
+        int yAbsDist = Math.abs(move.getTargetPosition().getY().getValue()-this.position.getY().getValue());
+        if(xAbsDist==0 && yAbsDist==0) {
+            return false;
+        }
+        if(xAbsDist<=1 && yAbsDist<=1) {
+            return true;
+        }
+        return false;
     }
 
     @Override
