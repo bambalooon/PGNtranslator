@@ -1,5 +1,8 @@
 package pgn.chessboard.gui;
 
+import pgn.chessboard.board.ChessBoard;
+import pgn.chessboard.figures.Figure;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -16,24 +19,30 @@ import java.io.IOException;
  */
 public class MainWindow extends JFrame {
 
-    JPanel main;
-    ImageIcon board;
+    ChessBoardPanel boardPanel;
 
     public MainWindow(String windowName) {
         super(windowName);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        main = new JPanel();
-        board = new ImageIcon();
-        JLabel label = new JLabel(board);
-        main.add(label);
+        try {
+            boardPanel = new ChessBoardPanel();
+        } catch (IOException e) {
+//            print error
+        }
         //controls
-        setLayout(new FlowLayout());
-        add(main);
+        setLayout(new BorderLayout());
+        add(boardPanel, BorderLayout.CENTER);
         //add(controls)
         pack();
     }
 
     public void drawBoard() throws IOException {
-        BufferedImage board = ImageIO.read(new File("chessboard/chessboard.png"));
+        ChessBoard checkboard = new ChessBoard();
+        Object[][] boardTemp = checkboard.getBoardCopy();
+        if(boardTemp instanceof Figure[][]) {
+            Figure[][] board = (Figure[][]) boardTemp;
+            boardPanel.updateBoard(board);
+            boardPanel.repaint();
+        }
     }
 }

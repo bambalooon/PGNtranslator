@@ -73,6 +73,11 @@ public class ChessBoard implements Board {
     }
 
     @Override
+    public Figure[][] getBoardCopy() {
+        return board.clone();
+    }
+
+    @Override
     public Figure checkPosition(Board.Position position) {
         int x = position.getX().getValue();
         int y = position.getY().getValue();

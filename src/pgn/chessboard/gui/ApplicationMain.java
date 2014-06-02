@@ -1,6 +1,7 @@
 package pgn.chessboard.gui;
 
 import javax.swing.*;
+import java.io.IOException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,6 +18,11 @@ public class ApplicationMain {
             public void run() {
                 final MainWindow wnd = new MainWindow("Chess PGN translator");
                 wnd.setVisible(true);
+                try {
+                    wnd.drawBoard();
+                } catch (IOException e) {
+
+                }
             }
         });
     }
