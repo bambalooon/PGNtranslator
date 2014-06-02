@@ -25,10 +25,10 @@ public abstract class Figure {
 
     public abstract boolean isMovePossible(ChessMove move); //to find moving figure
 
-    public void makeMove(ChessMove move) {
+    public Figure makeMove(ChessMove move) {  //returned Figure is promotion!
         lastPosition = this.position;
         position = move.getTargetPosition();
-        //no throwing because other function checks correctness
+        return null;
     }
 
     public ChessPlayer getOwner() {
@@ -61,5 +61,13 @@ public abstract class Figure {
             return true;
         }
         return false;
+    }
+
+    public void setPosition(Board.Position position) {
+        this.position = position;
+    }
+
+    public void setLastPosition(Board.Position lastPosition) {
+        this.lastPosition = lastPosition;
     }
 }

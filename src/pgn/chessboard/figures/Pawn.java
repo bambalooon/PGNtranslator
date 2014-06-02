@@ -1,9 +1,6 @@
 package pgn.chessboard.figures;
 
-import pgn.chessboard.board.Board;
-import pgn.chessboard.board.ChessBoard;
-import pgn.chessboard.board.ChessMove;
-import pgn.chessboard.board.PositionFixer;
+import pgn.chessboard.board.*;
 import pgn.chessboard.players.ChessPlayer;
 
 /**
@@ -20,7 +17,7 @@ public class Pawn extends Figure {
     }
 
     @Override
-    public void makeMove(ChessMove move) {
+    public Figure makeMove(ChessMove move) {
         if(move.getTargetPosition().getY()==null) {
             int y = this.position.getY().getValue();
             if(this.owner==ChessPlayer.WHITE) {
@@ -35,6 +32,15 @@ public class Pawn extends Figure {
             }
         }
         super.makeMove(move);
+        //Promotion!
+        if(move.isPromoted()) {
+            PawnPromotion promotion = move.getPromotion();
+            Figure givenFigure = promotion.getPromotion();
+            givenFigure.setPosition(this.position);
+            givenFigure.setLastPosition(this.lastPosition);
+            return givenFigure;
+        }
+        return null;
     }
 
     public boolean isMovePossible(ChessMove move) {

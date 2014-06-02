@@ -38,4 +38,12 @@ public class ChessMove {
     public MoveType getType() {
         return type;
     }
+
+    public boolean isPromoted() {
+        return promotion!=null;
+    }
+
+    public PawnPromotion getPromotion() {
+        return promotion;
+    }
 }

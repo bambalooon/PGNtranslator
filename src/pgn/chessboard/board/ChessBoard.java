@@ -81,6 +81,9 @@ public class ChessBoard implements Board {
 
     @Override
     public void makeMove(Figure figure, ChessMove move) throws IllegalArgumentException {  //for castling figure & position should be null
+        if(move.isPromoted() && !(figure instanceof Pawn)) {
+            throw new IllegalArgumentException("Anything other than Pawn cannot be promoted!");
+        }
         if(move.getType() == ChessMove.MoveType.KINGSIDECASTLING) {
             Figure king;
             Figure rook;
@@ -174,10 +177,15 @@ public class ChessBoard implements Board {
             }
             Position pos = figure.getPosition();
             Position targetPos = move.getTargetPosition();       //what if it's pawn attach? there is no Rank!!!!!
-            figure.makeMove(move);
+            Figure promotion = figure.makeMove(move);
             board[pos.getY().getValue()][pos.getX().getValue()] = null;
-
-            board[targetPos.getY().getValue()][targetPos.getX().getValue()] = figure;
+            if(promotion!=null) {
+                board[targetPos.getY().getValue()][targetPos.getX().getValue()] = promotion;
+            }
+            else {
+                board[targetPos.getY().getValue()][targetPos.getX().getValue()] = figure;
+            }
+            //check if check!!! - wrong move if there is!!
         }
     }
 
@@ -260,4 +268,7 @@ public class ChessBoard implements Board {
 
     }
 
+    protected boolean isChecked(ChessPlayer player) {
+        return false;
+    }
 }
