@@ -116,7 +116,7 @@ public class Tokenizer {
         return games.iterator();
     }
 
-    public static void main(String... args) throws IOException, ParseException {
+    public static void test() throws IOException, ParseException {
         Iterator<TokenizedGame> games = new Tokenizer(new File("1800-1900.pgn")).tokenizeGames();
         while(games.hasNext()) {
             System.out.println(games.next());
