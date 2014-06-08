@@ -3,9 +3,7 @@ package pgn.tokenizer;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,7 +28,7 @@ public class Tokenizer {
         pgnString = pgn;
     }
 
-    public Iterator<TokenizedGame> tokenizeGames() throws IOException, ParseException
+    public List<TokenizedGame> tokenizeGames() throws IOException, ParseException
     {
         Scanner scanner;
         if(pgnFile!=null) {
@@ -112,12 +110,11 @@ public class Tokenizer {
         }
 
 
-
-        return games.iterator();
+        return games;
     }
 
     public static void test() throws IOException, ParseException {
-        Iterator<TokenizedGame> games = new Tokenizer(new File("1800-1900.pgn")).tokenizeGames();
+        ListIterator<TokenizedGame> games = new Tokenizer(new File("1800-1900.pgn")).tokenizeGames().listIterator();
         while(games.hasNext()) {
             System.out.println(games.next());
         }
