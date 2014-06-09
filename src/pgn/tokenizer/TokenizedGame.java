@@ -123,7 +123,7 @@ public class TokenizedGame {
 
     public String toString() {
         String result = "";
-        result += "\nEvent: "+((event!=null) ? event : "?");
+        result += "Event: "+((event!=null) ? event : "?");
         result += "\nSite: "+((site!=null) ? site : "?");
         result += "\nDate: "+((date!=null) ? date : "?");
         result += "\nRound: "+((round!=0) ? round : "?");

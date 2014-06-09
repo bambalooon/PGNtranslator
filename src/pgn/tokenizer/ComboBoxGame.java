@@ -22,7 +22,7 @@ public class ComboBoxGame {
 
     @Override
     public String toString() {
-        return game.getEvent()+", "+game.getSite();
+        return game.getWhite()+" vs "+game.getBlack();
     }
 
 }

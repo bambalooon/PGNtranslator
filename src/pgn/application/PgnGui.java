@@ -16,6 +16,8 @@ import java.io.IOException;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class PgnGui extends JFrame implements ActionListener {
+    public static final int WIDTH = 400;
+    public static final int HEIGHT = 400;
     private static final String PREV = "PREV";
     private static final String NEXT = "NEXT";
     protected PGNtranslator application;
@@ -26,6 +28,7 @@ public abstract class PgnGui extends JFrame implements ActionListener {
         super(PGNtranslator.windowName);
         this.application = application;
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setLayout(new BorderLayout());
         this.createWindowNavButtons();
         pack();

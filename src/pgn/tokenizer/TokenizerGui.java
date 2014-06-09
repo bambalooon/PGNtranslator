@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.image.ImageObserver;
 import java.io.File;
 import java.util.*;
 
@@ -20,11 +21,14 @@ import java.util.*;
 public class TokenizerGui extends PgnGui {
     public static final String TOKENIZE = "TOKENIZE";
     public static final String CHOOSE_GAME = "CHOOSE_GAME";
+    private static final int GAME_INFO_WIDTH = PgnGui.WIDTH-50;
+    private static final int GAME_INFO_HEIGHT = PgnGui.HEIGHT-140;
 
     protected java.util.List<TokenizedGame> games;
     private JLabel label;
     private JComboBox<ComboBoxGame> gameChooser;
-    private JLabel tokenizedGameInfo;
+    private JTextArea tokenizedGameInfo;
+    private JScrollPane textScroll;
 
     public TokenizerGui(PGNtranslator application) {
         super(application);
@@ -39,12 +43,20 @@ public class TokenizerGui extends PgnGui {
         gameChooser.setVisible(false);
         gameChooser.addActionListener(this);
         gameChooser.setActionCommand(TokenizerGui.CHOOSE_GAME);
-        tokenizedGameInfo = new JLabel();
-        tokenizedGameInfo.setVisible(false);
+//        tokenizedGameInfo = new JLabel();
+        tokenizedGameInfo = new JTextArea();
+        tokenizedGameInfo.setEditable(false);
+        tokenizedGameInfo.setLineWrap(true);
+        tokenizedGameInfo.setWrapStyleWord(true);
+        textScroll = new JScrollPane(tokenizedGameInfo);
+        textScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        textScroll.setPreferredSize(new Dimension(GAME_INFO_WIDTH, GAME_INFO_HEIGHT));
+        textScroll.setVisible(false);
+
         main.add(label);
         main.add(tokenizeBtn);
         main.add(gameChooser);
-        main.add(tokenizedGameInfo);
+        main.add(textScroll);
 
         JToolBar toolBar = new JToolBar();
         toolBar.add(prevWindowBtn);
@@ -62,14 +74,15 @@ public class TokenizerGui extends PgnGui {
             case TOKENIZE:
                 try {
                     games = application.createTokens();
-//                    gameChooser.removeAllItems(); ????
+                    gameChooser.setModel(new DefaultComboBoxModel<ComboBoxGame>());
                     for(TokenizedGame game : games) {
                         gameChooser.addItem(new ComboBoxGame(game));
                     }
                     gameChooser.setVisible(true);
-                    tokenizedGameInfo.setVisible(true);
+                    textScroll.setVisible(true);
                     TokenizedGame selected = ((ComboBoxGame) gameChooser.getSelectedItem()).getGame();
                     tokenizedGameInfo.setText(selected.toString());
+                    nextWindowBtn.setVisible(true);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(
                         null,
