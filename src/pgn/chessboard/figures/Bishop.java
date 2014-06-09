@@ -32,7 +32,7 @@ public class Bishop extends Figure {
         int yMove = (ydist>0) ? 1 : -1;
         int destX = move.getTargetPosition().getX().getValue();
         int destY = move.getTargetPosition().getY().getValue();
-        for(int x = this.position.getX().getValue(), y = this.position.getY().getValue() ;
+        for(int x = this.position.getX().getValue()+xMove, y = this.position.getY().getValue()+yMove ;
         x!=destX && y!=destY ;x+=xMove, y+=yMove) {
 
             Figure figure = board.checkPosition(new ChessBoard.ChessPosition(x, y));
@@ -45,8 +45,8 @@ public class Bishop extends Figure {
 
     @Override
     public boolean equals(Object object) {
-        if(object instanceof Bishop) {
-            return super.equals(object);
+        if(super.equals(object)) {
+            return object instanceof Bishop;
         }
         return false;
     }

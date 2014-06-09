@@ -19,6 +19,7 @@ import java.text.ParseException;
  */
 public class ParserGui extends PgnGui {
     private static final String PARSE = "PARSE";
+    private static final String GAME_CHOOSE = "GAME_CHOOSE";
     private static final String ALL_GAMES = "wszystkie";
 
     protected java.util.List<TokenizedGame> games;
@@ -40,6 +41,8 @@ public class ParserGui extends PgnGui {
 
         gameChooser = new JComboBox<>();
         gameChooser.setVisible(false);
+        gameChooser.addActionListener(this);
+        gameChooser.setActionCommand(ParserGui.GAME_CHOOSE);
 
         result = new JLabel();
 
@@ -89,9 +92,17 @@ public class ParserGui extends PgnGui {
                     else {
                         application.parse(selected.getGame());
                     }
+                    result.setText("Parsowanie zakończone powodzeniem!");
                 } catch (ParseException ex) {
+                    JOptionPane.showMessageDialog(this, "Error while parsing", "Parser", JOptionPane.ERROR_MESSAGE);
                     //jakis moze JTextArea do wyswietlania bledu(na czerwono..)
+                } catch (IllegalArgumentException ex) {
+                    JOptionPane.showMessageDialog(this, "Illegal argument", "Parser", JOptionPane.ERROR_MESSAGE);
+                    //j.w.
                 }
+                break;
+            case GAME_CHOOSE:
+                result.setText("");
                 break;
         }
     }

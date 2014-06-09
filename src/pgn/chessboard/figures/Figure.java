@@ -45,17 +45,17 @@ public abstract class Figure {
 
     @Override
     public boolean equals(Object object) {
-        if(object instanceof Figure) {
+        if(object!=null && object instanceof Figure) {
             Figure figure = (Figure) object;
             if(figure.getOwner()==null || figure.getOwner()!=this.getOwner()) { //if doesn't have owner OR different - false
                 return false;
             }
-            Board.Column col = figure.getPosition().getX();
-            Board.Row row = figure.getPosition().getY();
-            if(col!=null && col!=this.getPosition().getX()) { //check if same column OR undefined
+            Board.Column col = this.getPosition().getX();
+            Board.Row row = this.getPosition().getY();
+            if(col!=null && col!=figure.getPosition().getX()) { //check if same column OR undefined
                 return false;
             }
-            if(row!=null && row!=this.getPosition().getY()) { //check if same row OR undefined
+            if(row!=null && row!=figure.getPosition().getY()) { //check if same row OR undefined
                 return false;
             }
             return true;

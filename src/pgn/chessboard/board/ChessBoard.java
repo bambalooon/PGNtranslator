@@ -176,8 +176,8 @@ public class ChessBoard implements Board {
             figure = findFigure(figure, move);
             if(move.getType()== ChessMove.MoveType.CAPTURE) { //check if it's correct capture
                 Figure captured = checkPosition(move.getTargetPosition());
-                if(captured==null || captured.getOwner()==figure.getOwner()) {
-                    throw new IllegalArgumentException("Capturing your own piece or nothing!");
+                if(captured==null || captured.getOwner()==figure.getOwner() || captured instanceof King) {
+                    throw new IllegalArgumentException("Capturing your own piece or nothing or King!");
                 }
             }
             Position pos = figure.getPosition();
@@ -195,16 +195,14 @@ public class ChessBoard implements Board {
     }
 
     protected Figure findFigure(Figure figure, ChessMove move) throws IllegalArgumentException {
-        boolean matched = false;
         Figure matchedFigure = null;
         for(Figure[] cols : board) {
             for (Figure fig : cols) {
-                if(fig.equals(figure) && fig.isMovePossible(move)) {
-                    if(matched) {
+                if(figure.equals(fig) && fig.isMovePossible(move)) {
+                    if(matchedFigure!=null) {
                         throw new IllegalArgumentException("Condition not explicit! Too many matched figures!");
                     }
                     matchedFigure = fig;
-                    matched = true;
                 }
             }
         }

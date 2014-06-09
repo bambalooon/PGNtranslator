@@ -1,6 +1,8 @@
 package pgn.parser;
 
 import pgn.chessboard.board.ChessBoard;
+import pgn.chessboard.board.ChessMove;
+import pgn.chessboard.board.PawnPromotion;
 import pgn.chessboard.figures.*;
 import pgn.chessboard.players.ChessPlayer;
 import pgn.tokenizer.TokenizedGame;
@@ -20,7 +22,7 @@ import java.util.List;
  */
 public class Parser {
 
-    public void parse(TokenizedGame game) throws ParseException {
+    public void parse(TokenizedGame game) throws ParseException, IllegalArgumentException {
         ChessBoard chessBoard = new ChessBoard();
         for(TokenizedGame.MovePair movePair : game.getMoves()) {
             String white = movePair.getWhite();
@@ -30,21 +32,23 @@ public class Parser {
                 parseMove(black, ChessPlayer.BLACK, chessBoard);
             }
         }
-
+        //save for watching
     }
 
-    public void parse(List<TokenizedGame> games) throws ParseException {
-
+    public void parse(List<TokenizedGame> games) throws ParseException, IllegalArgumentException {
+        throw new IllegalArgumentException();
     }
 
     protected enum ParseState { FIGURE, SOURCE_TARGET, TARGET, SPECIAL, PROMOTION, END };
     protected char[] figures = new char[]{'B', 'K', 'N', 'P', 'Q', 'R'};
 
-    protected void parseMove(String move, ChessPlayer player, ChessBoard board) throws ParseException {
+    protected void parseMove(String move, ChessPlayer player, ChessBoard board) throws ParseException, IllegalArgumentException {
         if(move.equals("O-O")) {
+            board.makeMove(null, new ChessMove(player, null, ChessMove.MoveType.KINGSIDECASTLING));
             return;
         }
         else if(move.equals("O-O-O")) {
+            board.makeMove(null, new ChessMove(player, null, ChessMove.MoveType.QUEENSIDECASTLING));
             return;
         }
         int i = 0;
@@ -205,6 +209,23 @@ public class Parser {
                     break ParserLoop;
             }
         }
-
+        ChessBoard.File chessFile = (sourceFile!=0 ? ChessBoard.File.valueOf(Character.toString(sourceFile)) : null);
+        ChessBoard.Rank chessRank = (sourceRank!=0 ? ChessBoard.Rank.valueOf("_"+Character.toString(sourceRank)) : null);
+        ChessBoard.ChessPosition pos = new ChessBoard.ChessPosition(chessFile, chessRank);
+        figure.setPosition(pos);
+        chessFile = (targetFile!=0 ? ChessBoard.File.valueOf(Character.toString(targetFile)) : null);
+        chessRank = (targetRank!=0 ? ChessBoard.Rank.valueOf("_"+Character.toString(targetRank)) : null);
+        ChessBoard.ChessPosition target = new ChessBoard.ChessPosition(chessFile, chessRank);
+        ChessMove.MoveType type = (attack ? ChessMove.MoveType.CAPTURE : ChessMove.MoveType.NORMAL);
+        ChessMove chessMove;
+        if(promotion!=null) {
+            chessMove = new ChessMove(player, target, type,
+                new PawnPromotion(promotion)
+            );
+        } else {
+            chessMove = new ChessMove(player, target, type);
+        }
+        board.makeMove(figure, chessMove);
+        //check if check & checkMate
     }
 }

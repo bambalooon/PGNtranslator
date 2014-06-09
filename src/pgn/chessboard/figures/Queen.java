@@ -40,7 +40,7 @@ public class Queen extends Figure {
         }
         int destX = move.getTargetPosition().getX().getValue();
         int destY = move.getTargetPosition().getY().getValue();
-        for(int x = this.position.getX().getValue(), y = this.position.getY().getValue() ;
+        for(int x = this.position.getX().getValue()+xMove, y = this.position.getY().getValue()+yMove ;
             x!=destX && y!=destY ;x+=xMove, y+=yMove) {
 
             Figure figure = board.checkPosition(new ChessBoard.ChessPosition(x, y));
@@ -53,8 +53,8 @@ public class Queen extends Figure {
 
     @Override
     public boolean equals(Object object) {
-        if(object instanceof Queen) {
-            return super.equals(object);
+        if(super.equals(object)) {
+            return object instanceof Queen;
         }
         return false;
     }

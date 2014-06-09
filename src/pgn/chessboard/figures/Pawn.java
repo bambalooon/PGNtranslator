@@ -89,24 +89,25 @@ public class Pawn extends Figure {
                             }
                             break;
                     }
-                }
-                Figure fig = board.checkPosition(move.getTargetPosition());
-                if(fig==null) { //el passante! - check if last move was 2-jump
-                    Figure jumper = board.checkPosition(
-                        new ChessBoard.ChessPosition(
-                            move.getTargetPosition().getX(), this.position.getY()
-                        )
-                    );
-                    if(jumper!=null && jumper instanceof Pawn) { //there has to be pawn!!!
-                        int distX = jumper.getPosition().getX().getValue()-jumper.getLastPosition().getX().getValue();
-                        int distY = jumper.getPosition().getY().getValue()-jumper.getLastPosition().getY().getValue();
-                        if(distX==0 && ((jumper.getOwner()==ChessPlayer.WHITE && distY==2) || (jumper.getOwner()==ChessPlayer.BLACK && distY==-2))) {
-                            //good el passante move
-                            return true;
+                    Figure fig = board.checkPosition(move.getTargetPosition());
+                    if(fig==null) { //el passante! - check if last move was 2-jump
+                        Figure jumper = board.checkPosition(
+                                new ChessBoard.ChessPosition(
+                                        move.getTargetPosition().getX(), this.position.getY()
+                                )
+                        );
+                        if(jumper!=null && jumper instanceof Pawn) { //there has to be pawn!!!
+                            int distX = jumper.getPosition().getX().getValue()-jumper.getLastPosition().getX().getValue();
+                            int distY = jumper.getPosition().getY().getValue()-jumper.getLastPosition().getY().getValue();
+                            if(distX==0 && ((jumper.getOwner()==ChessPlayer.WHITE && distY==2) || (jumper.getOwner()==ChessPlayer.BLACK && distY==-2))) {
+                                //good el passante move
+                                return true;
+                            }
                         }
+                        return false;
                     }
-                    return false;
                 }
+                return true;
             }
         }
         return false;
@@ -114,8 +115,8 @@ public class Pawn extends Figure {
 
     @Override
     public boolean equals(Object object) {
-        if(object instanceof Pawn) {
-            return super.equals(object);
+        if(super.equals(object)) {
+            return object instanceof Pawn;
         }
         return false;
     }

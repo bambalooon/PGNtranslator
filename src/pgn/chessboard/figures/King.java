@@ -31,8 +31,8 @@ public class King extends Figure {
 
     @Override
     public boolean equals(Object object) {
-        if(object instanceof King) {
-            return super.equals(object);
+        if(super.equals(object)) {
+            return object instanceof King;
         }
         return false;
     }

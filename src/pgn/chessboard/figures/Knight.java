@@ -28,8 +28,8 @@ public class Knight extends Figure {
 
     @Override
     public boolean equals(Object object) {
-        if(object instanceof Bishop) {
-            return super.equals(object);
+        if(super.equals(object)) {
+            return object instanceof Knight;
         }
         return false;
     }
