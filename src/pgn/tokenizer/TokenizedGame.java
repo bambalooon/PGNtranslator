@@ -2,6 +2,7 @@ package pgn.tokenizer;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,7 +22,7 @@ public class TokenizedGame {
     private String ECO;
     private String Eco;
     private String whiteELO;
-    private ArrayList<MovePair> moves = new ArrayList<MovePair>();
+    private List<MovePair> moves = new ArrayList<MovePair>();
 
     public static class MovePair {
         private String white, black;
@@ -119,6 +120,10 @@ public class TokenizedGame {
 
     public String getWhiteELO() {
         return whiteELO;
+    }
+
+    public List<MovePair> getMoves() {
+        return moves;
     }
 
     public String toString() {

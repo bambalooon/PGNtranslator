@@ -25,7 +25,6 @@ public class TokenizerGui extends PgnGui {
     private static final int GAME_INFO_HEIGHT = PgnGui.HEIGHT-140;
 
     protected java.util.List<TokenizedGame> games;
-    private JLabel label;
     private JComboBox<ComboBoxGame> gameChooser;
     private JTextArea tokenizedGameInfo;
     private JScrollPane textScroll;
@@ -33,7 +32,7 @@ public class TokenizerGui extends PgnGui {
     public TokenizerGui(PGNtranslator application) {
         super(application);
         JPanel main = new JPanel();
-        label = new JLabel();
+        JLabel label = new JLabel();
         label.setText("Możesz teraz rozpocząć konstrukcje tokenów...");
         JButton tokenizeBtn = new JButton();
         tokenizeBtn.addActionListener(this);
@@ -43,7 +42,6 @@ public class TokenizerGui extends PgnGui {
         gameChooser.setVisible(false);
         gameChooser.addActionListener(this);
         gameChooser.setActionCommand(TokenizerGui.CHOOSE_GAME);
-//        tokenizedGameInfo = new JLabel();
         tokenizedGameInfo = new JTextArea();
         tokenizedGameInfo.setEditable(false);
         tokenizedGameInfo.setLineWrap(true);

@@ -1,6 +1,8 @@
 package pgn.application;
 
 import pgn.chessboard.gui.MainWindow;
+import pgn.parser.Parser;
+import pgn.parser.ParserGui;
 import pgn.tokenizer.TokenizedGame;
 import pgn.tokenizer.Tokenizer;
 import pgn.tokenizer.TokenizerGui;
@@ -8,6 +10,7 @@ import pgn.tokenizer.TokenizerGui;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,10 +24,13 @@ import java.util.List;
 public enum PGNtranslator {
     INSTANCE;
     public static final String windowName = "Chess PGN translator";
-    List<PgnGui> windows;
-    Tokenizer tokenizer;
-    File pgnFile;
-    List<TokenizedGame> games;
+    private List<PgnGui> windows;
+    private Tokenizer tokenizer;
+    private Parser parser;
+    private File pgnFile;
+    private List<TokenizedGame> games;
+
+    private ParserGui parserGui;
 
 
 
@@ -39,8 +45,11 @@ public enum PGNtranslator {
                 startGui.setVisible(true);
                 TokenizerGui tokenizerGui = new TokenizerGui(PGNtranslator.INSTANCE);
                 tokenizerGui.setVisible(false);
+                parserGui = new ParserGui(PGNtranslator.INSTANCE);
+                parserGui.setVisible(false);
                 windows.add(startGui);
                 windows.add(tokenizerGui);
+                windows.add(parserGui);
 
 //                final MainWindow wnd = new MainWindow("Chess PGN translator");
 //                wnd.setVisible(true);
@@ -88,9 +97,22 @@ public enum PGNtranslator {
     public List<TokenizedGame> createTokens() throws Exception {
         if(tokenizer!=null) {
             games = tokenizer.tokenizeGames();
+            parserGui.updateGameList(games);
             return games;
         }
         throw new Exception("Tokenizer not initialized!");
+    }
+
+    public void createParser() {
+        parser = new Parser();
+    }
+
+    public void parse(TokenizedGame game) throws ParseException {
+        parser.parse(game);
+    }
+
+    public void parse(List<TokenizedGame> games) throws ParseException {
+        parser.parse(games);
     }
 
     public static void main(String... args) {

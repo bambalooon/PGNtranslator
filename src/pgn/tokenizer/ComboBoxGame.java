@@ -12,7 +12,7 @@ import pgn.tokenizer.TokenizedGame;
 public class ComboBoxGame {
 
     private TokenizedGame game;
-    protected ComboBoxGame(TokenizedGame game) {
+    public ComboBoxGame(TokenizedGame game) {
         this.game = game;
     }
 
