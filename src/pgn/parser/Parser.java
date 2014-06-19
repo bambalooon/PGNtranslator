@@ -42,7 +42,7 @@ public class Parser {
     protected enum ParseState { FIGURE, SOURCE_TARGET, TARGET, SPECIAL, PROMOTION, END };
     protected char[] figures = new char[]{'B', 'K', 'N', 'P', 'Q', 'R'};
 
-    protected void parseMove(String move, ChessPlayer player, ChessBoard board) throws ParseException, IllegalArgumentException {
+    public void parseMove(String move, ChessPlayer player, ChessBoard board) throws ParseException, IllegalArgumentException {
         if(move.equals("O-O")) {
             board.makeMove(null, new ChessMove(player, null, ChessMove.MoveType.KINGSIDECASTLING));
             return;

@@ -2,9 +2,12 @@ package pgn.chessboard.gui;
 
 import pgn.chessboard.board.ChessBoard;
 import pgn.chessboard.figures.Figure;
+import pgn.chessboard.players.ChessPlayer;
+import pgn.parser.Parser;
 import pgn.tokenizer.TokenizedGame;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,37 +28,60 @@ public class GameSimulation {
     private ListIterator<Figure[][]> iterator = boards.listIterator();
     private Iterator<TokenizedGame.MovePair> moveIterator;
     private TokenizedGame.MovePair movePair;
+    private ChessPlayer currentPlayer = ChessPlayer.WHITE;
+    private Parser parser;
 
-    public GameSimulation(ChessBoardPanel panel, TokenizedGame game) {
+    public GameSimulation(ChessBoardPanel panel, TokenizedGame game, Parser parser) {
         this.panel = panel;
         this.game = game;
+        this.parser = parser;
         this.chessBoard = new ChessBoard();
         this.drawStartBoard();
     }
 
 
     private void drawStartBoard() {
-        Object[][] boardTemp = chessBoard.getBoardCopy();
-        if(boardTemp instanceof Figure[][]) {
-            Figure[][] board = (Figure[][]) boardTemp;
-            iterator.add(board);
-            if(iterator.hasNext()) {
-                iterator.next();
-            }
-            moveIterator = game.getMoves().iterator();
-            panel.updateBoard(board);
-            panel.repaint();
+        Figure[][] board = chessBoard.getBoardCopy();
+        iterator.add(board);
+        if(iterator.hasNext()) {
+            iterator.next();
         }
+        moveIterator = game.getMoves().iterator();
+        panel.updateBoard(board);
+        panel.repaint();
     }
 
-    public void drawNextBoard() {
+    public void drawNextBoard() throws ParseException {
+        Figure[][] board;
         if(iterator.hasNext()) {
-            Figure[][] board = iterator.next();
+            board = iterator.next();
             panel.updateBoard(board);
             panel.repaint();
         }
         else {
-
+            if(currentPlayer==ChessPlayer.WHITE) {
+                if(moveIterator.hasNext()) {
+                    movePair = moveIterator.next();
+                    parser.parseMove(movePair.getWhite(), ChessPlayer.WHITE, chessBoard);
+                    board = chessBoard.getBoardCopy();
+                    iterator.add(board);
+                    currentPlayer = ChessPlayer.BLACK;
+                    panel.updateBoard(board);
+                    panel.repaint();
+                }
+                //throw error?
+            }
+            else if(currentPlayer==ChessPlayer.BLACK) {
+                if(movePair.getBlack()!=null) {
+                    parser.parseMove(movePair.getBlack(), ChessPlayer.WHITE, chessBoard);
+                    board = chessBoard.getBoardCopy();
+                    iterator.add(board);
+                    currentPlayer = ChessPlayer.WHITE;
+                    panel.updateBoard(board);
+                    panel.repaint();
+                }
+                //throw
+            }
         }
     }
 

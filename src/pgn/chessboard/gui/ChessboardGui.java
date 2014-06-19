@@ -4,6 +4,7 @@ import pgn.application.PGNtranslator;
 import pgn.application.PgnGui;
 import pgn.chessboard.board.ChessBoard;
 import pgn.chessboard.figures.Figure;
+import pgn.tokenizer.ComboBoxGame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -60,12 +62,18 @@ public class ChessboardGui extends PgnGui {
 
     public void actionPerformed(ActionEvent e) {
         super.actionPerformed(e);
-        JOptionPane.showMessageDialog(
-                null,
-                "Action: "+e.getActionCommand(),
-                "",
-                JOptionPane.INFORMATION_MESSAGE
-        );
+        try {
+            switch (e.getActionCommand()) {
+                case PREV:
+                    application.getSimulation().drawPrevBoard();
+                    break;
+                case NEXT:
+                    application.getSimulation().drawNextBoard();
+                    break;
+            }
+        } catch (ParseException ex) {
+
+        }
     }
 
     protected void addPlayButtons(JToolBar toolBar) {
