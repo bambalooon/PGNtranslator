@@ -139,6 +139,9 @@ public class ChessboardGui extends PgnGui {
                 gameChooser.addItem(new ComboBoxGame(game));
             }
         }
+        this.pack();
+        this.revalidate();
+        this.repaint();
     }
 
     public ChessBoardPanel getBoardPanel() {
