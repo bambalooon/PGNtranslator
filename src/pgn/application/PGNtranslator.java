@@ -1,6 +1,6 @@
 package pgn.application;
 
-import pgn.chessboard.gui.MainWindow;
+import pgn.chessboard.gui.ChessboardGui;
 import pgn.parser.Parser;
 import pgn.parser.ParserGui;
 import pgn.tokenizer.TokenizedGame;
@@ -9,7 +9,6 @@ import pgn.tokenizer.TokenizerGui;
 
 import javax.swing.*;
 import java.io.File;
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,11 @@ public enum PGNtranslator {
     private File pgnFile;
     private List<TokenizedGame> games;
 
+    private List<TokenizedGame> parsedGames;
+    private TokenizedGame parsedGame;
+
     private ParserGui parserGui;
+    private ChessboardGui boardGui;
 
 
 
@@ -47,11 +50,14 @@ public enum PGNtranslator {
                 tokenizerGui.setVisible(false);
                 parserGui = new ParserGui(PGNtranslator.INSTANCE);
                 parserGui.setVisible(false);
+                boardGui = new ChessboardGui(PGNtranslator.INSTANCE);
+                boardGui.setVisible(false);
                 windows.add(startGui);
                 windows.add(tokenizerGui);
                 windows.add(parserGui);
+                windows.add(boardGui);
 
-//                final MainWindow wnd = new MainWindow("Chess PGN translator");
+//                final ChessboardGui wnd = new ChessboardGui("Chess PGN translator");
 //                wnd.setVisible(true);
 //                try {
 //                    wnd.drawBoard();
@@ -113,6 +119,22 @@ public enum PGNtranslator {
 
     public void parse(List<TokenizedGame> games) throws ParseException {
         parser.parse(games);
+    }
+
+    public List<TokenizedGame> getParsedGames() {
+        return parsedGames;
+    }
+
+    public void setParsedGames(List<TokenizedGame> parsedGames) {
+        this.parsedGames = parsedGames;
+    }
+
+    public TokenizedGame getParsedGame() {
+        return parsedGame;
+    }
+
+    public void setParsedGame(TokenizedGame parsedGame) {
+        this.parsedGame = parsedGame;
     }
 
     public static void main(String... args) {

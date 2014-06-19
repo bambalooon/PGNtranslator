@@ -1,5 +1,7 @@
 package pgn.chessboard.gui;
 
+import pgn.application.PGNtranslator;
+import pgn.application.PgnGui;
 import pgn.chessboard.board.ChessBoard;
 import pgn.chessboard.figures.Figure;
 
@@ -19,7 +21,7 @@ import java.io.IOException;
  * Time: 12:23
  * To change this template use File | Settings | File Templates.
  */
-public class MainWindow extends JFrame implements ActionListener {
+public class ChessboardGui extends PgnGui {
     static final private String PLAY = "play";
     static final private String PAUSE = "pause";
     static final private String STOP = "stop";
@@ -34,9 +36,8 @@ public class MainWindow extends JFrame implements ActionListener {
     private JButton nextBtn;
     private JButton prevBtn;
 
-    public MainWindow(String windowName) {
-        super(windowName);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    public ChessboardGui(PGNtranslator app) {
+        super(app);
         try {
             boardPanel = new ChessBoardPanel();
         } catch (IOException e) {

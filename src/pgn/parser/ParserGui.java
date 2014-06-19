@@ -94,6 +94,7 @@ public class ParserGui extends PgnGui {
                         application.parse(selected.getGame());
                     }
                     result.setText("Parsowanie zakończone powodzeniem!");
+
                 } catch (ParseException ex) {
                     JOptionPane.showMessageDialog(this, "Error while parsing", "Parser", JOptionPane.ERROR_MESSAGE);
                     //jakis moze JTextArea do wyswietlania bledu(na czerwono..)
