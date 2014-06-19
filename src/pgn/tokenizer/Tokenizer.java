@@ -7,6 +7,10 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import java.nio.file.Files;
+        //java.lang.Object
+//java.nio.file.Files
+
 /**
  * Created with IntelliJ IDEA.
  * User: BamBalooon
@@ -31,6 +35,7 @@ public class Tokenizer {
 
     public List<TokenizedGame> tokenizeGames() throws IOException, ParseException
     {
+        
         Scanner scanner;
         if(pgnFile!=null) {
             scanner = new Scanner(pgnFile);
@@ -38,7 +43,7 @@ public class Tokenizer {
         else {
             scanner = new Scanner(pgnString);
         }
-
+       
         ArrayList<TokenizedGame> games = new ArrayList<TokenizedGame>();
 
         //Patterns
@@ -124,8 +129,25 @@ public class Tokenizer {
                     }
                     else // nie można było rozpoznać tokenu
                     {
-                        System.out.println(nextMove.matches(moveEndPattern));
-                        throw new ParseException("Niepoprawny ruch: " + nextMove, 0);
+                        int i = 1, j = 0;
+                        try
+                        {
+                            List<String> linie = Files.readAllLines(pgnFile.toPath());
+                            
+                            for (String linia : linie)
+                            {
+                                 if(linia.lastIndexOf(nextMove) != -1)
+                                 {
+                                     j = i;
+                                     break;
+                                 }
+                                 i++;
+                            }
+                        } catch (IOException e) {
+                            System.out.println(e);
+                        }
+                        
+                        throw new ParseException("Błąd w partii pomiędzy " + game.getWhite() + " - " + game.getBlack() +  ", data " + game.getDate() + ".\n Niepoprawny ruch w linii " + j + " : "  + nextMove, 0);
                     }
                     break;
             }
