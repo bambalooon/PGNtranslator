@@ -73,7 +73,7 @@ public class GameSimulation {
             }
             else if(currentPlayer==ChessPlayer.BLACK) {
                 if(movePair.getBlack()!=null) {
-                    parser.parseMove(movePair.getBlack(), ChessPlayer.WHITE, chessBoard);
+                    parser.parseMove(movePair.getBlack(), ChessPlayer.BLACK, chessBoard);
                     board = chessBoard.getBoardCopy();
                     iterator.add(board);
                     currentPlayer = ChessPlayer.WHITE;
