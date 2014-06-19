@@ -92,6 +92,9 @@ public class GameSimulation {
                 return board;
             }
         }
+        else if(!moveIterator.hasNext() || movePair.getBlack()==null) { //end
+
+        }
         //throw
         return null;
     }
