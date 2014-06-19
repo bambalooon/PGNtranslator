@@ -36,9 +36,8 @@ public class GameSimulation {
         Object[][] boardTemp = chessBoard.getBoardCopy();
         if(boardTemp instanceof Figure[][]) {
             Figure[][] board = (Figure[][]) boardTemp;
-            boards.add(board);
-//            if(iterator.hasNext())
-//                iterator.next();
+            iterator.add(board);
+            iterator.next();
             panel.updateBoard(board);
             panel.repaint();
         }
