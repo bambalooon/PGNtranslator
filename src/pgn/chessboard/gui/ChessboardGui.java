@@ -5,6 +5,7 @@ import pgn.application.PgnGui;
 import pgn.chessboard.board.ChessBoard;
 import pgn.chessboard.figures.Figure;
 import pgn.tokenizer.ComboBoxGame;
+import pgn.tokenizer.TokenizedGame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -29,6 +30,7 @@ public class ChessboardGui extends PgnGui {
     static final private String STOP = "stop";
     static final private String NEXT = "next";
     static final private String PREV = "prev";
+    static final private String GAME_CHOOSE = "GAME_CHOOSE";
 
     ChessBoardPanel boardPanel;
 
@@ -37,6 +39,8 @@ public class ChessboardGui extends PgnGui {
     private JButton stopBtn;
     private JButton nextBtn;
     private JButton prevBtn;
+
+    private JComboBox<ComboBoxGame> gameChooser;
 
     public static void main(String... args) {
         ChessboardGui g = new ChessboardGui(null);
@@ -50,11 +54,17 @@ public class ChessboardGui extends PgnGui {
         } catch (IOException e) {
 //            print error
         }
+        gameChooser = new JComboBox<>();
+        gameChooser.setVisible(false);
+        gameChooser.addActionListener(this);
+        gameChooser.setActionCommand(GAME_CHOOSE);
+
         JToolBar playBar = new JToolBar("Play options");
         playBar.add(prevWindowBtn);
         addPlayButtons(playBar);
         //controls
         setLayout(new BorderLayout());
+        add(gameChooser, BorderLayout.PAGE_START);
         add(boardPanel, BorderLayout.CENTER);
         add(playBar, BorderLayout.PAGE_END);
         pack();
@@ -69,6 +79,10 @@ public class ChessboardGui extends PgnGui {
                     break;
                 case NEXT:
                     application.getSimulation().drawNextBoard();
+                    break;
+                case GAME_CHOOSE:
+                    ComboBoxGame cbgame = (ComboBoxGame) gameChooser.getSelectedItem();
+                    application.createGameSimulation(boardPanel, cbgame.getGame());
                     break;
             }
         } catch (ParseException ex) {
@@ -111,6 +125,20 @@ public class ChessboardGui extends PgnGui {
         toolBar.add(nextBtn);
 
 
+    }
+
+    public void updateGameList() {
+        gameChooser.setModel(new DefaultComboBoxModel<ComboBoxGame>());
+        java.util.List<TokenizedGame> games = application.getParsedGames();
+        if(games==null) {
+            gameChooser.setVisible(false);
+        }
+        else {
+            gameChooser.setVisible(true);
+            for(TokenizedGame game : games) {
+                gameChooser.addItem(new ComboBoxGame(game));
+            }
+        }
     }
 
     public ChessBoardPanel getBoardPanel() {

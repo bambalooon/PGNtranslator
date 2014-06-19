@@ -102,8 +102,6 @@ public class ParserGui extends PgnGui {
                             +", move #"+ex.getMoveNum()+": "+ex.getMove()+" Error: "+ex.getMessage(), "Parser", JOptionPane.ERROR_MESSAGE);
                     nextWindowBtn.setVisible(false);
                     //jakis moze JTextArea do wyswietlania bledu(na czerwono..)
-                    nextWindowBtn.setVisible(true);
-                    application.setParsedGame(selected.getGame());
                 }
                 break;
             case GAME_CHOOSE:

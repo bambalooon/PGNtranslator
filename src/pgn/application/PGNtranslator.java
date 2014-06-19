@@ -1,6 +1,7 @@
 package pgn.application;
 
 import pgn.chessboard.board.ChessBoard;
+import pgn.chessboard.gui.ChessBoardPanel;
 import pgn.chessboard.gui.ChessboardGui;
 import pgn.chessboard.gui.GameSimulation;
 import pgn.chessboard.players.ChessPlayer;
@@ -126,8 +127,9 @@ public enum PGNtranslator {
 
     public void setParsedGames(List<TokenizedGame> parsedGames) {
         this.parsedGame = null;
-        this.simulation = null;
+        this.simulation = new GameSimulation(boardGui.getBoardPanel(), parsedGames.get(0), parser);
         this.parsedGames = parsedGames;
+        this.boardGui.updateGameList();
     }
 
     public TokenizedGame getParsedGame() {
@@ -138,6 +140,7 @@ public enum PGNtranslator {
         this.parsedGames = null;
         this.simulation = new GameSimulation(boardGui.getBoardPanel(), parsedGame, parser);
         this.parsedGame = parsedGame;
+        this.boardGui.updateGameList();
     }
 
     public static void main(String... args) {
@@ -149,7 +152,8 @@ public enum PGNtranslator {
         return simulation;
     }
 
-    public void setSimulation(GameSimulation simulation) {
-        this.simulation = simulation;
+    public void createGameSimulation(ChessBoardPanel panel, TokenizedGame game) {
+        if(parser==null) createParser();
+        this.simulation = new GameSimulation(panel, game, parser);
     }
 }
