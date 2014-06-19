@@ -12,12 +12,14 @@ import pgn.tokenizer.TokenizedGame;
 public class ParserException extends Exception {
     private TokenizedGame game;
     private int moveNum;
+    private String move;
     private String message;
 
-    public ParserException(TokenizedGame game, int moveNum, String message) {
+    public ParserException(TokenizedGame game, int moveNum, String move, String message) {
         this.game = game;
         this.moveNum = moveNum;
         this.message = message;
+        this.move = move;
     }
 
     public TokenizedGame getGame() {
@@ -42,5 +44,13 @@ public class ParserException extends Exception {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getMove() {
+        return move;
+    }
+
+    public void setMove(String move) {
+        this.move = move;
     }
 }

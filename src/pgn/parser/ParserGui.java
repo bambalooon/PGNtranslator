@@ -99,9 +99,11 @@ public class ParserGui extends PgnGui {
                     nextWindowBtn.setVisible(true);
                 } catch (ParserException ex) {
                     JOptionPane.showMessageDialog(this, "Game: "+ex.getGame().getWhite()+" vs "+ex.getGame().getBlack()
-                            +", move #"+ex.getMoveNum()+" Error: "+ex.getMessage(), "Parser", JOptionPane.ERROR_MESSAGE);
+                            +", move #"+ex.getMoveNum()+": "+ex.getMove()+" Error: "+ex.getMessage(), "Parser", JOptionPane.ERROR_MESSAGE);
                     nextWindowBtn.setVisible(false);
                     //jakis moze JTextArea do wyswietlania bledu(na czerwono..)
+                    nextWindowBtn.setVisible(true);
+                    application.setParsedGame(selected.getGame());
                 }
                 break;
             case GAME_CHOOSE:

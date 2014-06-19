@@ -79,7 +79,8 @@ public class ChessBoardPanel extends JPanel {
             for(int x = 0; x < board[y].length; x++) {
                 if(board[y][x]!=null) {
                     int xpos = ChessBoardIcons.xOffset+ChessBoardIcons.cellWidth*x;
-                    int ypos = ChessBoardIcons.yOffset+ChessBoardIcons.cellHeight*y;
+                    int trans_y = board.length-y-1;
+                    int ypos = ChessBoardIcons.yOffset+ChessBoardIcons.cellHeight*trans_y;
                     switch (board[y][x].getClass().getSimpleName()) {
                         case "Pawn":
                             if(board[y][x].getOwner()== ChessPlayer.WHITE) {

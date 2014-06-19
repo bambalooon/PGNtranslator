@@ -26,17 +26,17 @@ public class Parser {
         ChessBoard chessBoard = new ChessBoard();
         int moveNum = 1;
         for(TokenizedGame.MovePair movePair : game.getMoves()) {
-            String white = movePair.getWhite();
-            String black = movePair.getBlack();
+            String move =  movePair.getWhite();
             try {
-                parseMove(white, ChessPlayer.WHITE, chessBoard);
+                parseMove(move, ChessPlayer.WHITE, chessBoard);
                 moveNum++;
-                if(black!=null) {
-                    parseMove(black, ChessPlayer.BLACK, chessBoard);
+                move = movePair.getBlack();
+                if(move!=null) {
+                    parseMove(move, ChessPlayer.BLACK, chessBoard);
                     moveNum++;
                 }
             } catch (ParseException | IllegalArgumentException e) {
-                throw new ParserException(game, moveNum, e.getMessage());
+                throw new ParserException(game, moveNum, move, e.getMessage());
             }
         }
         //save for watching
