@@ -149,4 +149,7 @@ public class GameSimulation {
         panel.repaint();
     }
 
+    public TokenizedGame getGame() {
+        return game;
+    }
 }

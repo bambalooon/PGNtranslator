@@ -43,6 +43,7 @@ public class ChessboardGui extends PgnGui {
     private JButton prevBtn;
 
     private JComboBox<ComboBoxGame> gameChooser;
+    private SimulationPlayer simPlayer;
 
     public static void main(String... args) {
         ChessboardGui g = new ChessboardGui(null);
@@ -75,6 +76,7 @@ public class ChessboardGui extends PgnGui {
     public void actionPerformed(ActionEvent e) {
         super.actionPerformed(e);
         try {
+            ComboBoxGame cbgame;
             switch (e.getActionCommand()) {
                 case PREV:
                     application.getSimulation().drawPrevBoard();
@@ -95,8 +97,27 @@ public class ChessboardGui extends PgnGui {
                     }
                     break;
                 case GAME_CHOOSE:
-                    ComboBoxGame cbgame = (ComboBoxGame) gameChooser.getSelectedItem();
+                    cbgame = (ComboBoxGame) gameChooser.getSelectedItem();
                     application.createGameSimulation(boardPanel, cbgame.getGame());
+                    break;
+                case PLAY:
+                    simPlayer = new SimulationPlayer(this, application.getSimulation());
+                    simPlayer.start();
+                    playBtn.setVisible(false);
+                    pauseBtn.setVisible(true);
+                    break;
+                case STOP:
+                    simPlayer.stop();
+                    cbgame = (ComboBoxGame) gameChooser.getSelectedItem();
+                    application.createGameSimulation(boardPanel, cbgame.getGame());
+                    simPlayer = null;
+                    playBtn.setVisible(true);
+                    pauseBtn.setVisible(false);
+                    break;
+                case PAUSE:
+                    simPlayer.stop();
+                    playBtn.setVisible(true);
+                    pauseBtn.setVisible(false);
                     break;
             }
         } catch (ParseException ex) {
