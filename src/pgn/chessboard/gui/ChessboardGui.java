@@ -97,7 +97,9 @@ public class ChessboardGui extends PgnGui {
                     }
                     break;
                 case GAME_CHOOSE:
-                    simPlayer.stop();
+                    if(simPlayer!=null) {
+                        simPlayer.stop();
+                    }
                     simPlayer = null;
                     playBtn.setVisible(true);
                     pauseBtn.setVisible(false);
