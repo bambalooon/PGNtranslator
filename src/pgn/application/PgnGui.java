@@ -28,7 +28,7 @@ public abstract class PgnGui extends JFrame implements ActionListener {
         super(PGNtranslator.windowName);
         this.application = application;
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        setMinimumSize(new Dimension(WIDTH, HEIGHT));
         setLayout(new BorderLayout());
         this.createWindowNavButtons();
         pack();

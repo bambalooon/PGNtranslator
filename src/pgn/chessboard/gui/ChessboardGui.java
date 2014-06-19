@@ -36,6 +36,11 @@ public class ChessboardGui extends PgnGui {
     private JButton nextBtn;
     private JButton prevBtn;
 
+    public static void main(String... args) {
+        ChessboardGui g = new ChessboardGui(null);
+        g.setVisible(true);
+    }
+
     public ChessboardGui(PGNtranslator app) {
         super(app);
         try {
@@ -44,6 +49,7 @@ public class ChessboardGui extends PgnGui {
 //            print error
         }
         JToolBar playBar = new JToolBar("Play options");
+        playBar.add(prevWindowBtn);
         addPlayButtons(playBar);
         //controls
         setLayout(new BorderLayout());
@@ -52,17 +58,8 @@ public class ChessboardGui extends PgnGui {
         pack();
     }
 
-    public void drawBoard() throws IOException {
-        ChessBoard checkboard = new ChessBoard();
-        Object[][] boardTemp = checkboard.getBoardCopy();
-        if(boardTemp instanceof Figure[][]) {
-            Figure[][] board = (Figure[][]) boardTemp;
-            boardPanel.updateBoard(board);
-            boardPanel.repaint();
-        }
-    }
-
     public void actionPerformed(ActionEvent e) {
+        super.actionPerformed(e);
         JOptionPane.showMessageDialog(
                 null,
                 "Action: "+e.getActionCommand(),
@@ -106,5 +103,9 @@ public class ChessboardGui extends PgnGui {
         toolBar.add(nextBtn);
 
 
+    }
+
+    public ChessBoardPanel getBoardPanel() {
+        return boardPanel;
     }
 }

@@ -1,6 +1,7 @@
 package pgn.application;
 
 import pgn.chessboard.gui.ChessboardGui;
+import pgn.chessboard.gui.GameSimulation;
 import pgn.parser.Parser;
 import pgn.parser.ParserGui;
 import pgn.tokenizer.TokenizedGame;
@@ -35,6 +36,8 @@ public enum PGNtranslator {
     private ParserGui parserGui;
     private ChessboardGui boardGui;
 
+    private GameSimulation simulation;
+
 
 
     public void startGui() {
@@ -57,13 +60,6 @@ public enum PGNtranslator {
                 windows.add(parserGui);
                 windows.add(boardGui);
 
-//                final ChessboardGui wnd = new ChessboardGui("Chess PGN translator");
-//                wnd.setVisible(true);
-//                try {
-//                    wnd.drawBoard();
-//                } catch (IOException e) {
-//
-//                }
             }
         });
     }
@@ -126,6 +122,7 @@ public enum PGNtranslator {
     }
 
     public void setParsedGames(List<TokenizedGame> parsedGames) {
+        this.parsedGame = null;
         this.parsedGames = parsedGames;
     }
 
@@ -134,6 +131,8 @@ public enum PGNtranslator {
     }
 
     public void setParsedGame(TokenizedGame parsedGame) {
+        this.parsedGames = null;
+        this.simulation = new GameSimulation(boardGui.getBoardPanel(), parsedGame);
         this.parsedGame = parsedGame;
     }
 
