@@ -80,6 +80,7 @@ public class ParserGui extends PgnGui {
     }
 
     public void actionPerformed(ActionEvent e) {
+        super.actionPerformed(e);
         switch (e.getActionCommand()) {
             case PARSE:
                 application.createParser();
