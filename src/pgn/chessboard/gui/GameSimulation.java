@@ -30,6 +30,8 @@ public class GameSimulation {
     private ChessBoard chessBoard;
     private List<Figure[][]> boards = new LinkedList<>();
     private ListIterator<Figure[][]> iterator = boards.listIterator();
+    private List<ChessPlayer> plays = new LinkedList<>();
+    private ListIterator<ChessPlayer> playIterator = plays.listIterator();
     private Iterator<TokenizedGame.MovePair> moveIterator;
     private TokenizedGame.MovePair movePair;
     private ChessPlayer currentPlayer = ChessPlayer.WHITE;
@@ -50,25 +52,34 @@ public class GameSimulation {
         iterator.add(board);
         if(iterator.hasNext()) {
             iterator.next();
+            throw new RuntimeException("shouldn't?");
         }
         moveIterator = game.getMoves().iterator();
+        playIterator.add(null);
         panel.updateBoard(board);
         panel.repaint();
     }
 
     public void drawNextBoard() throws ParseException, GameProgressException {
         Figure[][] board;
+        ChessPlayer p;
         if(iterator.hasNext()) {
             board = iterator.next();
+            p = playIterator.next();
             if(board==this.board && iterator.hasNext()) {
                 board = iterator.next();
+                p = playIterator.next();
             }
             else if(board==this.board) {
                 makeNextMove();
                 return;
             }
             this.board = board;
-            panel.updateBoard(board);
+            if(p!=null) {
+                panel.updateBoard(board, p);
+            } else {
+                panel.updateBoard(board);
+            }
             panel.repaint();
         }
         else {
@@ -110,11 +121,17 @@ public class GameSimulation {
     public void drawPrevBoard() {
         if(iterator.hasPrevious()) {
             Figure[][] board = iterator.previous();
+            ChessPlayer player = playIterator.previous();
             if(board==this.board && iterator.hasPrevious()) {
                 board = iterator.previous();
+                player = playIterator.previous();
             }
             this.board = board;
-            panel.updateBoard(board);
+            if(player!=null) {
+                panel.updateBoard(board, player);
+            } else {
+                panel.updateBoard(board);
+            }
             panel.repaint();
         }
     }
@@ -124,8 +141,10 @@ public class GameSimulation {
         iterator.add(this.board);
         if(e.isCheck() || e.isCheckMate()) {
             panel.updateBoard(this.board, e.getPlayer());
+            playIterator.add(e.getPlayer());
         } else {
             panel.updateBoard(this.board);
+            playIterator.add(null);
         }
         panel.repaint();
     }
