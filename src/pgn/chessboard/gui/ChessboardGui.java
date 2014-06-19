@@ -113,7 +113,9 @@ public class ChessboardGui extends PgnGui {
                     pauseBtn.setVisible(true);
                     break;
                 case STOP:
-                    simPlayer.stop();
+                    if(simPlayer!=null) {
+                        simPlayer.stop();
+                    }
                     cbgame = (ComboBoxGame) gameChooser.getSelectedItem();
                     application.createGameSimulation(boardPanel, cbgame.getGame());
                     simPlayer = null;
