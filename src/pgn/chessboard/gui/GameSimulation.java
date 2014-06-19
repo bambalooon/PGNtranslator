@@ -23,6 +23,8 @@ public class GameSimulation {
     private ChessBoard chessBoard;
     private List<Figure[][]> boards = new LinkedList<>();
     private ListIterator<Figure[][]> iterator = boards.listIterator();
+    private Iterator<TokenizedGame.MovePair> moveIterator;
+    private TokenizedGame.MovePair movePair;
 
     public GameSimulation(ChessBoardPanel panel, TokenizedGame game) {
         this.panel = panel;
@@ -32,12 +34,15 @@ public class GameSimulation {
     }
 
 
-    public void drawStartBoard() {
+    private void drawStartBoard() {
         Object[][] boardTemp = chessBoard.getBoardCopy();
         if(boardTemp instanceof Figure[][]) {
             Figure[][] board = (Figure[][]) boardTemp;
             iterator.add(board);
-            iterator.next();
+            if(iterator.hasNext()) {
+                iterator.next();
+            }
+            moveIterator = game.getMoves().iterator();
             panel.updateBoard(board);
             panel.repaint();
         }
