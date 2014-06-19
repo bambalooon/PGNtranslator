@@ -59,7 +59,8 @@ public class TokenizedGame {
 
     public void setOption(String option, String value) throws IllegalArgumentException, ParseException {
         if(value.equals("?")) { //stays null
-            return;
+            return ;
+           //throw new IllegalArgumentException("Nierozpoznana wartosc tagu typu " + option); // dlaczego ten wyjątek się nie pojawia w programie
         }
         switch(option.toLowerCase()) {
             case "event":

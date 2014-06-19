@@ -85,7 +85,7 @@ public class TokenizerGui extends PgnGui {
                     JOptionPane.showMessageDialog(
                         null,
                         ex.getMessage(),
-                        "Tokenizacja",
+                        "Błąd składniowy",
                         JOptionPane.ERROR_MESSAGE
                     );
                 }
