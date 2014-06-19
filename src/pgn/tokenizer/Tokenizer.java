@@ -2,6 +2,7 @@ package pgn.tokenizer;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -132,7 +133,7 @@ public class Tokenizer {
                         int i = 1, j = 0;
                         try
                         {
-                            List<String> linie = Files.readAllLines(pgnFile.toPath());
+                            List<String> linie = Files.readAllLines(pgnFile.toPath(), Charset.defaultCharset());
                             
                             for (String linia : linie)
                             {

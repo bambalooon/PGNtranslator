@@ -82,7 +82,16 @@ public class ChessboardGui extends PgnGui {
                     try {
                         application.getSimulation().drawNextBoard();
                     } catch (GameProgressException ex) {
-
+                        TokenizedGame game = ((ComboBoxGame)gameChooser.getSelectedItem()).getGame();
+                        if(ex.isCheckMate()) {
+                            JOptionPane.showMessageDialog(this, "Szach mat!\nWygrał "+ex.getPlayer().toString(), game.getWhite()+" vs. "+game.getBlack(), JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        else if(ex.isEnd()) {
+                            JOptionPane.showMessageDialog(this, "Koniec gry!\n Wynik: "+game.getResult(), game.getWhite()+" vs. "+game.getBlack(), JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        else if(ex.isCheck()) {
+                            JOptionPane.showMessageDialog(this, "Szach", game.getWhite()+" vs. "+game.getBlack(), JOptionPane.INFORMATION_MESSAGE);
+                        }
                     }
                     break;
                 case GAME_CHOOSE:

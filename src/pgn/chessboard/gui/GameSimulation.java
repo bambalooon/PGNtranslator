@@ -78,6 +78,7 @@ public class GameSimulation {
     }
 
     private void makeNextMove() throws ParseException, GameProgressException {
+        GameProgressException progress = new GameProgressException(currentPlayer);
         try {
             if(currentPlayer==ChessPlayer.WHITE) {
                 if(moveIterator.hasNext()) {
@@ -92,23 +93,17 @@ public class GameSimulation {
                     parser.parseMove(movePair.getBlack(), ChessPlayer.BLACK, chessBoard);
                 }
             }
-            if(!moveIterator.hasNext() && currentPlayer==ChessPlayer.WHITE) {
-
-            }
-            else if(movePair.getBlack()==null && currentPlayer==ChessPlayer.BLACK) {
-
-            }
+            throw progress;
         } catch (GameProgressException e) {
             this.updateBoard();
             if(!moveIterator.hasNext() && currentPlayer==ChessPlayer.WHITE) {
-
+                e.setEnd(true);
             }
             else if(movePair.getBlack()==null && currentPlayer==ChessPlayer.BLACK) {
-
+                e.setEnd(true);
             }
             throw e;
         }
-        this.updateBoard();
     }
 
     public void drawPrevBoard() {

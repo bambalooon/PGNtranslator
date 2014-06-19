@@ -12,6 +12,7 @@ import pgn.chessboard.players.ChessPlayer;
 public class GameProgressException extends Exception {
     private boolean check = false;
     private boolean checkMate = false;
+    private boolean end = false;
     private ChessPlayer player;
 
     public GameProgressException(ChessPlayer player) {
@@ -32,6 +33,14 @@ public class GameProgressException extends Exception {
 
     public void setCheckMate(boolean checkMate) {
         this.checkMate = checkMate;
+    }
+
+    public boolean isEnd() {
+        return end;
+    }
+
+    public void setEnd(boolean end) {
+        this.end = end;
     }
 
     public ChessPlayer getPlayer() {
