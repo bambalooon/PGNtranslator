@@ -28,14 +28,19 @@ public class Parser {
         for(TokenizedGame.MovePair movePair : game.getMoves()) {
             String move =  movePair.getWhite();
             try {
-                parseMove(move, ChessPlayer.WHITE, chessBoard);
+                try {
+                    parseMove(move, ChessPlayer.WHITE, chessBoard);
+                } catch (GameProgressException e) {}
                 move = movePair.getBlack();
                 if(move!=null) {
-                    parseMove(move, ChessPlayer.BLACK, chessBoard);
+                    try {
+                        parseMove(move, ChessPlayer.BLACK, chessBoard);
+                    } catch (GameProgressException e) {}
                 }
                 moveNum++;
             } catch (ParseException | IllegalArgumentException e) {
                 throw new ParserException(game, moveNum, move, e.getMessage());
+
             }
         }
         //save for watching
@@ -50,7 +55,7 @@ public class Parser {
     protected enum ParseState { FIGURE, SOURCE_TARGET, TARGET, SPECIAL, PROMOTION, END };
     protected char[] figures = new char[]{'B', 'K', 'N', 'P', 'Q', 'R'};
 
-    public void parseMove(String move, ChessPlayer player, ChessBoard board) throws ParseException, IllegalArgumentException {
+    public void parseMove(String move, ChessPlayer player, ChessBoard board) throws ParseException, IllegalArgumentException, GameProgressException {
         if(move.equals("O-O")) {
             board.makeMove(null, new ChessMove(player, null, ChessMove.MoveType.KINGSIDECASTLING));
             return;
@@ -234,6 +239,16 @@ public class Parser {
             chessMove = new ChessMove(player, target, type);
         }
         board.makeMove(figure, chessMove);
+        if(checkMate) {
+            GameProgressException progress = new GameProgressException(player);
+            progress.setCheckMate(true);
+            throw progress;
+        }
+        if(check) {
+            GameProgressException progress = new GameProgressException(player);
+            progress.setCheck(true);
+            throw progress;
+        }
         //check if check & checkMate
     }
 }

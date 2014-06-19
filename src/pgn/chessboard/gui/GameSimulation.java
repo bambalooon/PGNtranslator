@@ -3,9 +3,11 @@ package pgn.chessboard.gui;
 import pgn.chessboard.board.ChessBoard;
 import pgn.chessboard.figures.Figure;
 import pgn.chessboard.players.ChessPlayer;
+import pgn.parser.GameProgressException;
 import pgn.parser.Parser;
 import pgn.tokenizer.TokenizedGame;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Iterator;
@@ -73,30 +75,31 @@ public class GameSimulation {
     }
 
     private Figure[][] makeNextMove() throws ParseException {
-        if(currentPlayer==ChessPlayer.WHITE) {
-            if(moveIterator.hasNext()) {
-                movePair = moveIterator.next();
-                parser.parseMove(movePair.getWhite(), ChessPlayer.WHITE, chessBoard);
-                board = chessBoard.getBoardCopy();
-                iterator.add(board);
-                currentPlayer = ChessPlayer.BLACK;
-                return board;
+        try {
+            if(currentPlayer==ChessPlayer.WHITE) {
+                if(moveIterator.hasNext()) {
+                    currentPlayer = ChessPlayer.BLACK;
+                    movePair = moveIterator.next();
+                    parser.parseMove(movePair.getWhite(), ChessPlayer.WHITE, chessBoard);
+                }
             }
-        }
-        else if(currentPlayer==ChessPlayer.BLACK) {
-            if(movePair.getBlack()!=null) {
-                parser.parseMove(movePair.getBlack(), ChessPlayer.BLACK, chessBoard);
-                board = chessBoard.getBoardCopy();
-                iterator.add(board);
-                currentPlayer = ChessPlayer.WHITE;
-                return board;
+            else if(currentPlayer==ChessPlayer.BLACK) {
+                if(movePair.getBlack()!=null) {
+                    currentPlayer = ChessPlayer.WHITE;
+                    parser.parseMove(movePair.getBlack(), ChessPlayer.BLACK, chessBoard);
+                }
             }
-        }
-        else if(!moveIterator.hasNext() || movePair.getBlack()==null) { //end
+            else if(!moveIterator.hasNext() || movePair.getBlack()==null) {
+                return null;
+            }
+
+        } catch (GameProgressException e) {
+
 
         }
-        //throw
-        return null;
+        board = chessBoard.getBoardCopy();
+        iterator.add(board);
+        return board;
     }
 
     public void drawPrevBoard() {
