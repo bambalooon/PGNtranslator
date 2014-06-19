@@ -29,12 +29,11 @@ public class Parser {
             String move =  movePair.getWhite();
             try {
                 parseMove(move, ChessPlayer.WHITE, chessBoard);
-                moveNum++;
                 move = movePair.getBlack();
                 if(move!=null) {
                     parseMove(move, ChessPlayer.BLACK, chessBoard);
-                    moveNum++;
                 }
+                moveNum++;
             } catch (ParseException | IllegalArgumentException e) {
                 throw new ParserException(game, moveNum, move, e.getMessage());
             }

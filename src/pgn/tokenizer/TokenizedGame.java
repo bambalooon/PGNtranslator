@@ -22,6 +22,10 @@ public class TokenizedGame {
     private String ECO;
     private String Eco;
     private String whiteELO;
+    private String FEN;
+    private String SetUp;
+    private String EventDate;
+
     private List<MovePair> moves = new ArrayList<MovePair>();
 
     public static class MovePair {
@@ -57,28 +61,37 @@ public class TokenizedGame {
         if(value.equals("?")) { //stays null
             return;
         }
-        if(option.equalsIgnoreCase("Event")) {
-            event = value;
-        } else if(option.equalsIgnoreCase("Site")) {
-            site = value;
-        } else if(option.equalsIgnoreCase("Date")) {
-            date = value;
-        } else if(option.equalsIgnoreCase("Round")) {
-            round = Integer.parseInt(value);
-        } else if(option.equalsIgnoreCase("White")) {
-            white = value;
-        } else if(option.equalsIgnoreCase("Black")) {
-            black = value;
-        } else if(option.equalsIgnoreCase("Result")) {
-            result = value;
-        } else if(option.equals("ECO")) {
-            ECO = value;
-        } else if(option.equals("Eco")) {
-            Eco = value;
-        } else if(option.equalsIgnoreCase("WhiteELO")) {
-            whiteELO = value;
-        } else {
-            throw new IllegalArgumentException();
+        switch(option.toLowerCase()) {
+            case "event":
+                event = value; break;
+            case "site":
+                site = value; break;
+            case "date":
+                date = value; break;
+            case "round":
+                round = Integer.parseInt(value); break;
+            case "white":
+                white = value; break;
+            case "black":
+                black = value; break;
+            case "result":
+                result = value; break;
+            case "whiteelo":
+                whiteELO = value; break;
+            case "fen":
+                FEN = value; break;
+            case "setup":
+                SetUp = value; break;
+            case "eventdate":
+                EventDate = value; break;
+            default:
+                if(option.equals("ECO")) {
+                    ECO = value;
+                } else if(option.equals("Eco")) {
+                    Eco = value;
+                } else {
+                    throw new IllegalArgumentException(option+": "+value);
+                }
         }
     }
 
@@ -122,22 +135,37 @@ public class TokenizedGame {
         return whiteELO;
     }
 
+    public String getFEN() {
+        return FEN;
+    }
+
+    public String getSetUp() {
+        return SetUp;
+    }
+
+    public String getEventDate() {
+        return EventDate;
+    }
+
     public List<MovePair> getMoves() {
         return moves;
     }
 
     public String toString() {
         String result = "";
-        result += "Event: "+((event!=null) ? event : "?");
-        result += "\nSite: "+((site!=null) ? site : "?");
-        result += "\nDate: "+((date!=null) ? date : "?");
-        result += "\nRound: "+((round!=0) ? round : "?");
-        result += "\nWhite: "+((white!=null) ? white : "?");
-        result += "\nBlack: "+((black!=null) ? black : "?");
-        result += "\nResult: "+((this.result!=null) ? this.result : "?");
-        result += "\nECO: "+((ECO!=null) ? ECO : "?");
-        result += "\nEco: "+((Eco!=null) ? Eco : "?");
-        result += "\nWhiteELO: "+((whiteELO!=null) ? whiteELO : "?");
+        result += ((event!=null) ? "\nEvent: "+event : "");
+        result += ((site!=null) ? "\nSite: "+site : "");
+        result += ((date!=null) ? "\nDate: "+date : "");
+        result += ((round!=0) ? "\nRound: "+round : "");
+        result += ((white!=null) ? "\nWhite: "+white : "");
+        result += ((black!=null) ? "\nBlack: "+black : "");
+        result += ((this.result!=null) ? "\nResult: "+this.result : "");
+        result += ((ECO!=null) ? "\nECO: "+ECO : "");
+        result += ((Eco!=null) ? "\nEco: "+Eco : "");
+        result += ((whiteELO!=null) ? "\nWhiteELO: "+whiteELO : "");
+        result += ((FEN!=null) ? "\nFEN: "+FEN : "");
+        result += ((SetUp!=null) ? "\nSetUp: "+SetUp : "");
+        result += ((EventDate!=null) ? "\nEventDate: "+EventDate : "");
 
         int i=1;
         for(MovePair move : moves) {

@@ -180,8 +180,13 @@ public class ChessBoard implements Board {
             figure = findFigure(figure, move);
             if(move.getType()== ChessMove.MoveType.CAPTURE) { //check if it's correct capture
                 Figure captured = checkPosition(move.getTargetPosition());
-                if(captured==null || captured.getOwner()==figure.getOwner() || captured instanceof King) {
-                    throw new IllegalArgumentException("Atak na puste pole, własną figurę lub króla!");
+                if(captured==null) {
+                    if(!(figure instanceof Pawn)) {
+                        throw new IllegalArgumentException("Atak na puste pole!");
+                    }
+                }
+                else if(captured.getOwner()==figure.getOwner() || captured instanceof King) {
+                    throw new IllegalArgumentException("Atak na własną figurę lub króla!");
                 }
             }
             Position pos = figure.getPosition();

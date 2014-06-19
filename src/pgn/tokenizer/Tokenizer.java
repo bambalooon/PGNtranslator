@@ -84,7 +84,7 @@ public class Tokenizer {
                     if(matcher.matches()) {
                         if(nextMove.matches(moveEndPattern)) {
                             if(!game.getResult().equals(matcher.group(2))) {
-                                System.out.println("ERROR");  //throw exc
+                                System.out.println("ERROR"+game.getEvent()+":"+game.getResult()+":"+matcher.group(2));  //throw exc
                             }
                             game.addMove(matcher.group(1));
                             mode = DataType.OPTIONS;
@@ -96,7 +96,7 @@ public class Tokenizer {
                         }
                     } else if(endMatcher.matches()) {
                         if(!game.getResult().equals(endMatcher.group(3)+"-"+endMatcher.group(4))) {
-                            System.out.println("ERROR"); //throw exc
+                            System.out.println("ERROR"+":"+game.getEvent()); //throw exc
                         }
                         game.addMovePair(endMatcher.group(1), endMatcher.group(2));
                         mode = DataType.OPTIONS;
@@ -113,8 +113,8 @@ public class Tokenizer {
         return games;
     }
 
-    public static void test() throws IOException, ParseException {
-        ListIterator<TokenizedGame> games = new Tokenizer(new File("1800-1900.pgn")).tokenizeGames().listIterator();
+    public static void main(String... args) throws IOException, ParseException {
+        ListIterator<TokenizedGame> games = new Tokenizer(new File("1901-1920.pgn")).tokenizeGames().listIterator();
         while(games.hasNext()) {
             System.out.println(games.next());
         }
