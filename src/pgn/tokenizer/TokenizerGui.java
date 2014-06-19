@@ -97,18 +97,10 @@ public class TokenizerGui extends PgnGui {
                     tokenizedGameInfo.setText(selected.toString());
                     nextWindowBtn.setVisible(true);
                 } catch (Exception ex) {
-                 gameChooser.setVisible(true);
-                 textScroll.setVisible(true);
-                 tokenizedGameInfo.setText(ex.getMessage());
-                 
-               /*
-                    JOptionPane.showMessageDialog(
-                        null,
-                        ex.getMessage(),
-                        "Błąd składniowy",
-                        JOptionPane.ERROR_MESSAGE
-                    );*/
-                    
+                    gameChooser.setVisible(true);
+                    textScroll.setVisible(true);
+                    gameChooser.setVisible(false);
+                    tokenizedGameInfo.setText(ex.getMessage());
                 }
                 break;
             case CHOOSE_GAME:
