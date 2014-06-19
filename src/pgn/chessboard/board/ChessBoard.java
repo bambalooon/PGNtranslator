@@ -74,7 +74,11 @@ public class ChessBoard implements Board {
 
     @Override
     public Figure[][] getBoardCopy() {
-        return board.clone();
+        Figure[][] clone = new Figure[board.length][];
+        for(int i=0; i<clone.length; i++) {
+            clone[i] = board[i].clone();
+        }
+        return clone;
     }
 
     @Override

@@ -30,6 +30,7 @@ public class GameSimulation {
     private TokenizedGame.MovePair movePair;
     private ChessPlayer currentPlayer = ChessPlayer.WHITE;
     private Parser parser;
+    private Figure[][] board;
 
     public GameSimulation(ChessBoardPanel panel, TokenizedGame game, Parser parser) {
         this.panel = panel;
@@ -55,39 +56,53 @@ public class GameSimulation {
         Figure[][] board;
         if(iterator.hasNext()) {
             board = iterator.next();
-            panel.updateBoard(board);
-            panel.repaint();
+            if(board==this.board && iterator.hasNext()) {
+                board = iterator.next();
+            }
+            else if(board==this.board) {
+                board = makeNextMove();
+            }
+            this.board = board;
         }
         else {
-            if(currentPlayer==ChessPlayer.WHITE) {
-                if(moveIterator.hasNext()) {
-                    movePair = moveIterator.next();
-                    parser.parseMove(movePair.getWhite(), ChessPlayer.WHITE, chessBoard);
-                    board = chessBoard.getBoardCopy();
-                    iterator.add(board);
-                    currentPlayer = ChessPlayer.BLACK;
-                    panel.updateBoard(board);
-                    panel.repaint();
-                }
-                //throw error?
-            }
-            else if(currentPlayer==ChessPlayer.BLACK) {
-                if(movePair.getBlack()!=null) {
-                    parser.parseMove(movePair.getBlack(), ChessPlayer.BLACK, chessBoard);
-                    board = chessBoard.getBoardCopy();
-                    iterator.add(board);
-                    currentPlayer = ChessPlayer.WHITE;
-                    panel.updateBoard(board);
-                    panel.repaint();
-                }
-                //throw
+            this.board = makeNextMove();
+        }
+        if(this.board==null) return;
+        panel.updateBoard(this.board);
+        panel.repaint();
+    }
+
+    private Figure[][] makeNextMove() throws ParseException {
+        if(currentPlayer==ChessPlayer.WHITE) {
+            if(moveIterator.hasNext()) {
+                movePair = moveIterator.next();
+                parser.parseMove(movePair.getWhite(), ChessPlayer.WHITE, chessBoard);
+                board = chessBoard.getBoardCopy();
+                iterator.add(board);
+                currentPlayer = ChessPlayer.BLACK;
+                return board;
             }
         }
+        else if(currentPlayer==ChessPlayer.BLACK) {
+            if(movePair.getBlack()!=null) {
+                parser.parseMove(movePair.getBlack(), ChessPlayer.BLACK, chessBoard);
+                board = chessBoard.getBoardCopy();
+                iterator.add(board);
+                currentPlayer = ChessPlayer.WHITE;
+                return board;
+            }
+        }
+        //throw
+        return null;
     }
 
     public void drawPrevBoard() {
         if(iterator.hasPrevious()) {
             Figure[][] board = iterator.previous();
+            if(board==this.board && iterator.hasPrevious()) {
+                board = iterator.previous();
+            }
+            this.board = board;
             panel.updateBoard(board);
             panel.repaint();
         }
