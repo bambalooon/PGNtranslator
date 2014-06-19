@@ -28,7 +28,7 @@ public class TokenizerGui extends PgnGui {
     private JComboBox<ComboBoxGame> gameChooser;
     private JTextArea tokenizedGameInfo;
     private JScrollPane textScroll;
-
+    
     public TokenizerGui(PGNtranslator application) {
         super(application);
         JPanel main = new JPanel();
@@ -50,11 +50,26 @@ public class TokenizerGui extends PgnGui {
         textScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         textScroll.setPreferredSize(new Dimension(GAME_INFO_WIDTH, GAME_INFO_HEIGHT));
         textScroll.setVisible(false);
-
+        /*
+          tokenizerErrors = new JTextArea();
+                    tokenizerErrors.setEditable(false);
+                    tokenizerErrors.setLineWrap(true);
+                    tokenizerErrors.setWrapStyleWord(true);
+   */
+           /*                 
+         textScroll2 = new JScrollPane(tokenizerErrors);
+        textScroll2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        textScroll2.setPreferredSize(new Dimension(GAME_INFO_WIDTH, GAME_INFO_HEIGHT));
+        textScroll.setVisible(false);
+             */             
+        
         main.add(label);
         main.add(tokenizeBtn);
         main.add(gameChooser);
         main.add(textScroll);
+        //main.add(textScroll2);
+        //main.add(tokenizerErrors);
+        
 
         JToolBar toolBar = new JToolBar();
         toolBar.add(prevWindowBtn);
@@ -82,12 +97,18 @@ public class TokenizerGui extends PgnGui {
                     tokenizedGameInfo.setText(selected.toString());
                     nextWindowBtn.setVisible(true);
                 } catch (Exception ex) {
+                 gameChooser.setVisible(true);
+                 textScroll.setVisible(true);
+                 tokenizedGameInfo.setText(ex.getMessage());
+                 
+               /*
                     JOptionPane.showMessageDialog(
                         null,
                         ex.getMessage(),
                         "Błąd składniowy",
                         JOptionPane.ERROR_MESSAGE
-                    );
+                    );*/
+                    
                 }
                 break;
             case CHOOSE_GAME:
