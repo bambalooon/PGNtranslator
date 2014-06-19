@@ -4,6 +4,7 @@ import pgn.application.PGNtranslator;
 import pgn.application.PgnGui;
 import pgn.chessboard.board.ChessBoard;
 import pgn.chessboard.figures.Figure;
+import pgn.chessboard.players.ChessPlayer;
 import pgn.parser.GameProgressException;
 import pgn.tokenizer.ComboBoxGame;
 import pgn.tokenizer.TokenizedGame;
@@ -84,13 +85,12 @@ public class ChessboardGui extends PgnGui {
                     } catch (GameProgressException ex) {
                         TokenizedGame game = ((ComboBoxGame)gameChooser.getSelectedItem()).getGame();
                         if(ex.isCheckMate()) {
-                            JOptionPane.showMessageDialog(this, "Szach mat!\nWygrał "+ex.getPlayer().toString(), game.getWhite()+" vs. "+game.getBlack(), JOptionPane.INFORMATION_MESSAGE);
+                            String player = ((ex.getPlayer()==ChessPlayer.WHITE) ? game.getWhite() : game.getBlack());
+                            JOptionPane.showMessageDialog(this, "Szach mat!\nWygrał "+player, game.getWhite()+" vs. "+game.getBlack(), JOptionPane.INFORMATION_MESSAGE);
                         }
                         else if(ex.isEnd()) {
-                            JOptionPane.showMessageDialog(this, "Koniec gry!\n Wynik: "+game.getResult(), game.getWhite()+" vs. "+game.getBlack(), JOptionPane.INFORMATION_MESSAGE);
-                        }
-                        else if(ex.isCheck()) {
-                            JOptionPane.showMessageDialog(this, "Szach", game.getWhite()+" vs. "+game.getBlack(), JOptionPane.INFORMATION_MESSAGE);
+                            String result = ((game.getResult()=="1-0") ? "Wygrał: "+game.getWhite() : ((game.getResult()=="0-1") ? "Wygrał: "+game.getBlack() : "Remis"));
+                            JOptionPane.showMessageDialog(this, "Koniec gry!\n"+result, game.getWhite()+" vs. "+game.getBlack(), JOptionPane.INFORMATION_MESSAGE);
                         }
                     }
                     break;

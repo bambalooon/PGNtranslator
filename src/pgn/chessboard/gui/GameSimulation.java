@@ -3,6 +3,7 @@ package pgn.chessboard.gui;
 import pgn.application.PGNtranslator;
 import pgn.chessboard.board.ChessBoard;
 import pgn.chessboard.figures.Figure;
+import pgn.chessboard.figures.King;
 import pgn.chessboard.players.ChessPlayer;
 import pgn.parser.GameProgressException;
 import pgn.parser.Parser;
@@ -95,7 +96,7 @@ public class GameSimulation {
             }
             throw progress;
         } catch (GameProgressException e) {
-            this.updateBoard();
+            this.updateBoard(e);
             if(!moveIterator.hasNext() && currentPlayer==ChessPlayer.WHITE) {
                 e.setEnd(true);
             }
@@ -118,10 +119,14 @@ public class GameSimulation {
         }
     }
 
-    public void updateBoard() {
+    public void updateBoard(GameProgressException e) {
         this.board = chessBoard.getBoardCopy();
         iterator.add(this.board);
-        panel.updateBoard(this.board);
+        if(e.isCheck() || e.isCheckMate()) {
+            panel.updateBoard(this.board, e.getPlayer());
+        } else {
+            panel.updateBoard(this.board);
+        }
         panel.repaint();
     }
 

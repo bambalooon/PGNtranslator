@@ -130,7 +130,76 @@ public class ChessBoardPanel extends JPanel {
         }
         g2d.dispose();
         editedBoard = image;
+    }
 
+    public void updateBoard(Figure[][] board, ChessPlayer player) {
+        int w = this.board.getWidth();
+        int h = this.board.getHeight();
+        BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = image.createGraphics();
+        g2d.drawImage(this.board, 0, 0, null);
+        g2d.setColor(new Color(220,20,60));
+        for(int y = 0; y < board.length; y++) {
+            for(int x = 0; x < board[y].length; x++) {
+                if(board[y][x]!=null) {
+                    int xpos = ChessBoardIcons.xOffset+ChessBoardIcons.cellWidth*x;
+                    int trans_y = board.length-y-1;
+                    int ypos = ChessBoardIcons.yOffset+ChessBoardIcons.cellHeight*trans_y;
+                    switch (board[y][x].getClass().getSimpleName()) {
+                        case "Pawn":
+                            if(board[y][x].getOwner()== ChessPlayer.WHITE) {
+                                g2d.drawImage(ChessBoardIcons.wPawn, xpos, ypos, null);
+                            } else {
+                                g2d.drawImage(ChessBoardIcons.bPawn, xpos, ypos, null);
+                            }
+                            break;
+                        case "Bishop":
+                            if(board[y][x].getOwner()== ChessPlayer.WHITE) {
+                                g2d.drawImage(ChessBoardIcons.wBishop, xpos, ypos, null);
+                            } else {
+                                g2d.drawImage(ChessBoardIcons.bBishop, xpos, ypos, null);
+                            }
+                            break;
+                        case "Rook":
+                            if(board[y][x].getOwner()== ChessPlayer.WHITE) {
+                                g2d.drawImage(ChessBoardIcons.wRook, xpos, ypos, null);
+                            } else {
+                                g2d.drawImage(ChessBoardIcons.bRook, xpos, ypos, null);
+                            }
+                            break;
+                        case "Knight":
+                            if(board[y][x].getOwner()== ChessPlayer.WHITE) {
+                                g2d.drawImage(ChessBoardIcons.wKnight, xpos, ypos, null);
+                            } else {
+                                g2d.drawImage(ChessBoardIcons.bKnight, xpos, ypos, null);
+                            }
+                            break;
+                        case "Queen":
+                            if(board[y][x].getOwner()== ChessPlayer.WHITE) {
+                                g2d.drawImage(ChessBoardIcons.wQueen, xpos, ypos, null);
+                            } else {
+                                g2d.drawImage(ChessBoardIcons.bQueen, xpos, ypos, null);
+                            }
+                            break;
+                        case "King":
+                            if(board[y][x].getOwner()== ChessPlayer.WHITE) {
+                                if(player!=ChessPlayer.WHITE) {
+                                    g2d.fillRect(xpos-1, ypos-1, ChessBoardIcons.cellWidth, ChessBoardIcons.cellHeight);
+                                }
+                                g2d.drawImage(ChessBoardIcons.wKing, xpos, ypos, null);
+                            } else {
+                                if(player!=ChessPlayer.BLACK) {
+                                    g2d.fillRect(xpos-1, ypos-1, ChessBoardIcons.cellWidth, ChessBoardIcons.cellHeight);
+                                }
+                                g2d.drawImage(ChessBoardIcons.bKing, xpos, ypos, null);
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+        g2d.dispose();
+        editedBoard = image;
     }
 
     @Override
