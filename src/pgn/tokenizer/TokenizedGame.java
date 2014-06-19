@@ -55,7 +55,8 @@ public class TokenizedGame {
 
     public void setOption(String option, String value) throws IllegalArgumentException, ParseException {
         if(value.equals("?")) { //stays null
-            return;
+            return ;
+           //throw new IllegalArgumentException("Nierozpoznana wartosc tagu typu " + option); // dlaczego ten wyjątek się nie pojawia w programie
         }
         if(option.equalsIgnoreCase("Event")) {
             event = value;
@@ -78,7 +79,7 @@ public class TokenizedGame {
         } else if(option.equalsIgnoreCase("WhiteELO")) {
             whiteELO = value;
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Nieznany tag typu: " + option);
         }
     }
 

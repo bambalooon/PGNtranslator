@@ -1,3 +1,5 @@
 /.idea/
 /out/
 /PGNtranslator.imls
+/build/
+/dist/
