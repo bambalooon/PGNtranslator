@@ -22,21 +22,30 @@ import java.util.List;
  */
 public class Parser {
 
-    public void parse(TokenizedGame game) throws ParseException, IllegalArgumentException {
+    public void parse(TokenizedGame game) throws ParserException {
         ChessBoard chessBoard = new ChessBoard();
+        int moveNum = 1;
         for(TokenizedGame.MovePair movePair : game.getMoves()) {
             String white = movePair.getWhite();
             String black = movePair.getBlack();
-            parseMove(white, ChessPlayer.WHITE, chessBoard);
-            if(black!=null) {
-                parseMove(black, ChessPlayer.BLACK, chessBoard);
+            try {
+                parseMove(white, ChessPlayer.WHITE, chessBoard);
+                moveNum++;
+                if(black!=null) {
+                    parseMove(black, ChessPlayer.BLACK, chessBoard);
+                    moveNum++;
+                }
+            } catch (ParseException | IllegalArgumentException e) {
+                throw new ParserException(game, moveNum, e.getMessage());
             }
         }
         //save for watching
     }
 
-    public void parse(List<TokenizedGame> games) throws ParseException, IllegalArgumentException {
-        throw new IllegalArgumentException();
+    public void parse(List<TokenizedGame> games) throws ParserException {
+        for(TokenizedGame game : games) {
+            parse(game);
+        }
     }
 
     protected enum ParseState { FIGURE, SOURCE_TARGET, TARGET, SPECIAL, PROMOTION, END };
@@ -75,7 +84,7 @@ public class Parser {
                 token = move.charAt(i);
             }
             if(checkMate && state!=ParseState.END) {
-                throw new ParseException("", 0);
+                throw new ParseException("Gra nie zakończona po szach macie!", 0);
             }
             switch (state) {
                 case FIGURE:
@@ -135,14 +144,14 @@ public class Parser {
                             state = ParseState.SPECIAL;
                         }
                         else {
-                            throw new ParseException("", 0); //oznaczyc numer ruchu itp
+                            throw new ParseException("Niejednoznaczne określenie figury w ruchu!", 0); //oznaczyc numer ruchu itp
                         }
                     }
                     break;
                 case TARGET:
                     if(token>='a' && token<='h') { //source or target
                         if(file!=0 || rank!=0) {
-                            throw new ParseException("", 0); //oznaczyc numer ruchu itp
+                            throw new ParseException("Kolumna lub rząd już podany!", 0); //oznaczyc numer ruchu itp
                         } else {
                             file = token;
                             i++;
@@ -150,7 +159,7 @@ public class Parser {
                     }
                     else if(token>='1' && token<='8') {
                         if(rank!=0) {
-                            throw new ParseException("", 0); //oznaczyc numer ruchu itp
+                            throw new ParseException("Rząd już podany!", 0); //oznaczyc numer ruchu itp
                         } else {
                             rank = token;
                             i++;
@@ -164,7 +173,7 @@ public class Parser {
                             state = ParseState.SPECIAL;
                         }
                         else {
-                            throw new ParseException("", 0); //oznaczyc numer ruchu itp
+                            throw new ParseException("Niejednoznaczna pozycja figury!", 0); //oznaczyc numer ruchu itp
                         }
                     }
                     break;
@@ -190,7 +199,7 @@ public class Parser {
                         case 'Q': promotion = new Queen(board, player, null); break;
                         case 'R': promotion = new Rook(board, player, null); break;
                         case 'N': promotion = new Knight(board, player, null); break;
-                        default: throw new ParseException("", 0);
+                        default: throw new ParseException("Promocja niedozwolona!", 0);
                     }
                     i++;
                     state = ParseState.SPECIAL;
@@ -203,7 +212,7 @@ public class Parser {
                             file = 0; rank = 0;
                         }
                         else {
-                            throw new ParseException("", 0); //oznaczyc numer ruchu itp
+                            throw new ParseException("Niejednoznaczny ruch!", 0); //oznaczyc numer ruchu itp
                         }
                     }
                     break ParserLoop;

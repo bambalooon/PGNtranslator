@@ -5,6 +5,7 @@ import pgn.chessboard.gui.ChessboardGui;
 import pgn.chessboard.gui.GameSimulation;
 import pgn.chessboard.players.ChessPlayer;
 import pgn.parser.Parser;
+import pgn.parser.ParserException;
 import pgn.parser.ParserGui;
 import pgn.tokenizer.TokenizedGame;
 import pgn.tokenizer.Tokenizer;
@@ -111,11 +112,11 @@ public enum PGNtranslator {
         parser = new Parser();
     }
 
-    public void parse(TokenizedGame game) throws ParseException {
+    public void parse(TokenizedGame game) throws ParserException {
         parser.parse(game);
     }
 
-    public void parse(List<TokenizedGame> games) throws ParseException {
+    public void parse(List<TokenizedGame> games) throws ParserException {
         parser.parse(games);
     }
 
