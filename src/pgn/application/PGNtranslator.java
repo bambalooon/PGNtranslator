@@ -1,7 +1,12 @@
 package pgn.application;
 
-import pgn.chessboard.gui.MainWindow;
+import pgn.chessboard.board.ChessBoard;
+import pgn.chessboard.gui.ChessBoardPanel;
+import pgn.chessboard.gui.ChessboardGui;
+import pgn.chessboard.gui.GameSimulation;
+import pgn.chessboard.players.ChessPlayer;
 import pgn.parser.Parser;
+import pgn.parser.ParserException;
 import pgn.parser.ParserGui;
 import pgn.tokenizer.TokenizedGame;
 import pgn.tokenizer.Tokenizer;
@@ -9,7 +14,6 @@ import pgn.tokenizer.TokenizerGui;
 
 import javax.swing.*;
 import java.io.File;
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +34,13 @@ public enum PGNtranslator {
     private File pgnFile;
     private List<TokenizedGame> games;
 
+    private List<TokenizedGame> parsedGames;
+    private TokenizedGame parsedGame;
+
     private ParserGui parserGui;
+    private ChessboardGui boardGui;
+
+    private GameSimulation simulation;
 
 
 
@@ -47,17 +57,13 @@ public enum PGNtranslator {
                 tokenizerGui.setVisible(false);
                 parserGui = new ParserGui(PGNtranslator.INSTANCE);
                 parserGui.setVisible(false);
+                boardGui = new ChessboardGui(PGNtranslator.INSTANCE);
+                boardGui.setVisible(false);
                 windows.add(startGui);
                 windows.add(tokenizerGui);
                 windows.add(parserGui);
+                windows.add(boardGui);
 
-//                final MainWindow wnd = new MainWindow("Chess PGN translator");
-//                wnd.setVisible(true);
-//                try {
-//                    wnd.drawBoard();
-//                } catch (IOException e) {
-//
-//                }
             }
         });
     }
@@ -107,16 +113,47 @@ public enum PGNtranslator {
         parser = new Parser();
     }
 
-    public void parse(TokenizedGame game) throws ParseException {
+    public void parse(TokenizedGame game) throws ParserException {
         parser.parse(game);
     }
 
-    public void parse(List<TokenizedGame> games) throws ParseException {
+    public void parse(List<TokenizedGame> games) throws ParserException {
         parser.parse(games);
+    }
+
+    public List<TokenizedGame> getParsedGames() {
+        return parsedGames;
+    }
+
+    public void setParsedGames(List<TokenizedGame> parsedGames) {
+        this.parsedGame = null;
+        this.simulation = new GameSimulation(boardGui.getBoardPanel(), parsedGames.get(0), parser);
+        this.parsedGames = parsedGames;
+        this.boardGui.updateGameList();
+    }
+
+    public TokenizedGame getParsedGame() {
+        return parsedGame;
+    }
+
+    public void setParsedGame(TokenizedGame parsedGame) {
+        this.parsedGames = null;
+        this.simulation = new GameSimulation(boardGui.getBoardPanel(), parsedGame, parser);
+        this.parsedGame = parsedGame;
+        this.boardGui.updateGameList();
     }
 
     public static void main(String... args) {
         PGNtranslator.INSTANCE.startGui();
 
+    }
+
+    public GameSimulation getSimulation() {
+        return simulation;
+    }
+
+    public void createGameSimulation(ChessBoardPanel panel, TokenizedGame game) {
+        if(parser==null) createParser();
+        this.simulation = new GameSimulation(panel, game, parser);
     }
 }

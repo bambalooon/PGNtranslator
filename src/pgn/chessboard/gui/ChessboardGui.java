@@ -1,7 +1,11 @@
 package pgn.chessboard.gui;
 
+import pgn.application.PGNtranslator;
+import pgn.application.PgnGui;
 import pgn.chessboard.board.ChessBoard;
 import pgn.chessboard.figures.Figure;
+import pgn.tokenizer.ComboBoxGame;
+import pgn.tokenizer.TokenizedGame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,12 +24,13 @@ import java.io.IOException;
  * Time: 12:23
  * To change this template use File | Settings | File Templates.
  */
-public class MainWindow extends JFrame implements ActionListener {
+public class ChessboardGui extends PgnGui {
     static final private String PLAY = "play";
     static final private String PAUSE = "pause";
     static final private String STOP = "stop";
     static final private String NEXT = "next";
     static final private String PREV = "prev";
+    static final private String GAME_CHOOSE = "GAME_CHOOSE";
 
     ChessBoardPanel boardPanel;
 
@@ -34,40 +40,54 @@ public class MainWindow extends JFrame implements ActionListener {
     private JButton nextBtn;
     private JButton prevBtn;
 
-    public MainWindow(String windowName) {
-        super(windowName);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    private JComboBox<ComboBoxGame> gameChooser;
+
+    public static void main(String... args) {
+        ChessboardGui g = new ChessboardGui(null);
+        g.setVisible(true);
+    }
+
+    public ChessboardGui(PGNtranslator app) {
+        super(app);
         try {
             boardPanel = new ChessBoardPanel();
         } catch (IOException e) {
 //            print error
         }
+        gameChooser = new JComboBox<>();
+        gameChooser.setVisible(false);
+        gameChooser.addActionListener(this);
+        gameChooser.setActionCommand(GAME_CHOOSE);
+
         JToolBar playBar = new JToolBar("Play options");
+        playBar.add(prevWindowBtn);
         addPlayButtons(playBar);
         //controls
         setLayout(new BorderLayout());
+        add(gameChooser, BorderLayout.PAGE_START);
         add(boardPanel, BorderLayout.CENTER);
         add(playBar, BorderLayout.PAGE_END);
         pack();
     }
 
-    public void drawBoard() throws IOException {
-        ChessBoard checkboard = new ChessBoard();
-        Object[][] boardTemp = checkboard.getBoardCopy();
-        if(boardTemp instanceof Figure[][]) {
-            Figure[][] board = (Figure[][]) boardTemp;
-            boardPanel.updateBoard(board);
-            boardPanel.repaint();
-        }
-    }
-
     public void actionPerformed(ActionEvent e) {
-        JOptionPane.showMessageDialog(
-                null,
-                "Action: "+e.getActionCommand(),
-                "",
-                JOptionPane.INFORMATION_MESSAGE
-        );
+        super.actionPerformed(e);
+        try {
+            switch (e.getActionCommand()) {
+                case PREV:
+                    application.getSimulation().drawPrevBoard();
+                    break;
+                case NEXT:
+                    application.getSimulation().drawNextBoard();
+                    break;
+                case GAME_CHOOSE:
+                    ComboBoxGame cbgame = (ComboBoxGame) gameChooser.getSelectedItem();
+                    application.createGameSimulation(boardPanel, cbgame.getGame());
+                    break;
+            }
+        } catch (ParseException ex) {
+
+        }
     }
 
     protected void addPlayButtons(JToolBar toolBar) {
@@ -105,5 +125,26 @@ public class MainWindow extends JFrame implements ActionListener {
         toolBar.add(nextBtn);
 
 
+    }
+
+    public void updateGameList() {
+        gameChooser.setModel(new DefaultComboBoxModel<ComboBoxGame>());
+        java.util.List<TokenizedGame> games = application.getParsedGames();
+        if(games==null) {
+            gameChooser.setVisible(false);
+        }
+        else {
+            gameChooser.setVisible(true);
+            for(TokenizedGame game : games) {
+                gameChooser.addItem(new ComboBoxGame(game));
+            }
+        }
+        this.pack();
+        this.revalidate();
+        this.repaint();
+    }
+
+    public ChessBoardPanel getBoardPanel() {
+        return boardPanel;
     }
 }

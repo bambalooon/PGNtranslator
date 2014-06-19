@@ -136,8 +136,8 @@ String endPattern = "((([a-h1-8])?(x)?[a-h][18]=[NBQR]|O-O(-O)?|([a-h1-8])?(x)?(
         return games;
     }
 
-    public static void test() throws IOException, ParseException {
-        ListIterator<TokenizedGame> games = new Tokenizer(new File("1800-1900.pgn")).tokenizeGames().listIterator();
+    public static void main(String... args) throws IOException, ParseException {
+        ListIterator<TokenizedGame> games = new Tokenizer(new File("1901-1920.pgn")).tokenizeGames().listIterator();
         while(games.hasNext()) {
             System.out.println(games.next());
         }

@@ -74,7 +74,11 @@ public class ChessBoard implements Board {
 
     @Override
     public Figure[][] getBoardCopy() {
-        return board.clone();
+        Figure[][] clone = new Figure[board.length][];
+        for(int i=0; i<clone.length; i++) {
+            clone[i] = board[i].clone();
+        }
+        return clone;
     }
 
     @Override
@@ -87,7 +91,7 @@ public class ChessBoard implements Board {
     @Override
     public void makeMove(Figure figure, ChessMove move) throws IllegalArgumentException {  //for castling figure & position should be null
         if(move.isPromoted() && !(figure instanceof Pawn)) {
-            throw new IllegalArgumentException("Anything other than Pawn cannot be promoted!");
+            throw new IllegalArgumentException("Tylko pion może być promowany!");
         }
         if(move.getType() == ChessMove.MoveType.KINGSIDECASTLING) {
             Figure king;
@@ -107,7 +111,7 @@ public class ChessBoard implements Board {
                         rook.makeMove(new ChessMove(null, new ChessPosition(File.f, Rank._1), null));
                     }
                     else {
-                        throw new IllegalArgumentException("Castling cannot be done!");
+                        throw new IllegalArgumentException("Roszada niedozwolona!");
                     }
                     return;
                 case BLACK:
@@ -124,7 +128,7 @@ public class ChessBoard implements Board {
                         rook.makeMove(new ChessMove(null, new ChessPosition(File.f, Rank._8), null));
                     }
                     else {
-                        throw new IllegalArgumentException("Castling cannot be done!");
+                        throw new IllegalArgumentException("Roszada niedozwolona!");
                     }
                     return;
             }
@@ -148,7 +152,7 @@ public class ChessBoard implements Board {
                         rook.makeMove(new ChessMove(null, new ChessPosition(File.d, Rank._1), null));
                     }
                     else {
-                        throw new IllegalArgumentException("Castling cannot be done!");
+                        throw new IllegalArgumentException("Roszada niedozwolona!");
                     }
                     return;
                 case BLACK:
@@ -166,7 +170,7 @@ public class ChessBoard implements Board {
                         rook.makeMove(new ChessMove(null, new ChessPosition(File.d, Rank._8), null));
                     }
                     else {
-                        throw new IllegalArgumentException("Castling cannot be done!");
+                        throw new IllegalArgumentException("Roszada niedozwolona!");
                     }
                     return;
             }
@@ -176,8 +180,13 @@ public class ChessBoard implements Board {
             figure = findFigure(figure, move);
             if(move.getType()== ChessMove.MoveType.CAPTURE) { //check if it's correct capture
                 Figure captured = checkPosition(move.getTargetPosition());
-                if(captured==null || captured.getOwner()==figure.getOwner() || captured instanceof King) {
-                    throw new IllegalArgumentException("Capturing your own piece or nothing or King!");
+                if(captured==null) {
+                    if(!(figure instanceof Pawn)) {
+                        throw new IllegalArgumentException("Atak na puste pole!");
+                    }
+                }
+                else if(captured.getOwner()==figure.getOwner() || captured instanceof King) {
+                    throw new IllegalArgumentException("Atak na własną figurę lub króla!");
                 }
             }
             Position pos = figure.getPosition();
@@ -200,14 +209,14 @@ public class ChessBoard implements Board {
             for (Figure fig : cols) {
                 if(figure.equals(fig) && fig.isMovePossible(move)) {
                     if(matchedFigure!=null) {
-                        throw new IllegalArgumentException("Condition not explicit! Too many matched figures!");
+                        throw new IllegalArgumentException("Ruch niejednoznaczny - wiele pasujących figur!");
                     }
                     matchedFigure = fig;
                 }
             }
         }
         if(matchedFigure==null) {
-            throw new IllegalArgumentException("No figure matched!");
+            throw new IllegalArgumentException("Żadna figura nie pasuje!");
         }
         return matchedFigure;
     }
