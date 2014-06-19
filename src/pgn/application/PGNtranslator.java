@@ -156,4 +156,8 @@ public enum PGNtranslator {
         if(parser==null) createParser();
         this.simulation = new GameSimulation(panel, game, parser);
     }
+
+    public ChessboardGui getBoardGui() {
+        return boardGui;
+    }
 }

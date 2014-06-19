@@ -1,5 +1,6 @@
 package pgn.chessboard.gui;
 
+import pgn.application.PGNtranslator;
 import pgn.chessboard.board.ChessBoard;
 import pgn.chessboard.figures.Figure;
 import pgn.chessboard.players.ChessPlayer;
@@ -54,7 +55,7 @@ public class GameSimulation {
         panel.repaint();
     }
 
-    public void drawNextBoard() throws ParseException {
+    public void drawNextBoard() throws ParseException, GameProgressException {
         Figure[][] board;
         if(iterator.hasNext()) {
             board = iterator.next();
@@ -62,19 +63,21 @@ public class GameSimulation {
                 board = iterator.next();
             }
             else if(board==this.board) {
-                board = makeNextMove();
+                makeNextMove();
+                return;
             }
             this.board = board;
+            panel.updateBoard(board);
+            panel.repaint();
         }
         else {
-            this.board = makeNextMove();
+            makeNextMove();
+            return;
         }
         if(this.board==null) return;
-        panel.updateBoard(this.board);
-        panel.repaint();
     }
 
-    private Figure[][] makeNextMove() throws ParseException {
+    private void makeNextMove() throws ParseException, GameProgressException {
         try {
             if(currentPlayer==ChessPlayer.WHITE) {
                 if(moveIterator.hasNext()) {
@@ -89,17 +92,23 @@ public class GameSimulation {
                     parser.parseMove(movePair.getBlack(), ChessPlayer.BLACK, chessBoard);
                 }
             }
-            else if(!moveIterator.hasNext() || movePair.getBlack()==null) {
-                return null;
+            if(!moveIterator.hasNext() && currentPlayer==ChessPlayer.WHITE) {
+
             }
+            else if(movePair.getBlack()==null && currentPlayer==ChessPlayer.BLACK) {
 
+            }
         } catch (GameProgressException e) {
+            this.updateBoard();
+            if(!moveIterator.hasNext() && currentPlayer==ChessPlayer.WHITE) {
 
+            }
+            else if(movePair.getBlack()==null && currentPlayer==ChessPlayer.BLACK) {
 
+            }
+            throw e;
         }
-        board = chessBoard.getBoardCopy();
-        iterator.add(board);
-        return board;
+        this.updateBoard();
     }
 
     public void drawPrevBoard() {
@@ -112,6 +121,13 @@ public class GameSimulation {
             panel.updateBoard(board);
             panel.repaint();
         }
+    }
+
+    public void updateBoard() {
+        this.board = chessBoard.getBoardCopy();
+        iterator.add(this.board);
+        panel.updateBoard(this.board);
+        panel.repaint();
     }
 
 }

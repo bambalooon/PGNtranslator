@@ -4,6 +4,7 @@ import pgn.application.PGNtranslator;
 import pgn.application.PgnGui;
 import pgn.chessboard.board.ChessBoard;
 import pgn.chessboard.figures.Figure;
+import pgn.parser.GameProgressException;
 import pgn.tokenizer.ComboBoxGame;
 import pgn.tokenizer.TokenizedGame;
 
@@ -78,7 +79,11 @@ public class ChessboardGui extends PgnGui {
                     application.getSimulation().drawPrevBoard();
                     break;
                 case NEXT:
-                    application.getSimulation().drawNextBoard();
+                    try {
+                        application.getSimulation().drawNextBoard();
+                    } catch (GameProgressException ex) {
+
+                    }
                     break;
                 case GAME_CHOOSE:
                     ComboBoxGame cbgame = (ComboBoxGame) gameChooser.getSelectedItem();
