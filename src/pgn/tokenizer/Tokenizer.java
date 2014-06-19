@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 public class Tokenizer {
     private File pgnFile = null;
     private String pgnString = null;
+    private File lexerOutput = null;
 
     private enum DataType { OPTIONS, GAME };
 
@@ -44,20 +45,27 @@ public class Tokenizer {
         String oPattern = "^\\[([a-zA-Z]+)\\s\"([a-zA-Z0-9_\\-\\.,\\s\\?\\(\\)/]*)\"\\]$";
         Pattern optionsPattern = Pattern.compile(oPattern);
 
-        String movePattern = "^([\\da-zA-Z\\-\\+#=]+)\\s+([\\da-zA-Z\\-\\+#=/]+)$";
-        Pattern mPattern = Pattern.compile(movePattern);
+String movePattern =  "((([a-h1-8])?(x)?[a-h][18]=[NBQR]|O-O(-O)?|([a-h1-8])?(x)?([a-h])([2-7])|([KNBQR])?([a-h1-8])?(x)?([a-h])([1-8]))([+#])?)(\\s)*((([a-h1-8])?(x)?[a-h][18]=[NBQR]|O-O(-O)?|([a-h1-8])?(x)?([a-h])([2-7])|([KNBQR])?([a-h1-8])?(x)?([a-h])([1-8]))([+#])?)";
 
-        String moveEndPattern = "^([\\da-zA-Z\\-\\+#=]+)\\s+(1/2|0|1)\\-(1/2|0|1)$";
 
-        String endPattern = "^([\\da-zA-Z\\-\\+#=]+)\\s+([\\da-zA-Z\\-\\+#=]+)\\s+(1/2|0|1)\\-(1/2|0|1)$";
+        
+
+String moveEndPattern = "((([a-h1-8])?(x)?[a-h][18]=[NBQR]|O-O(-O)?|([a-h1-8])?(x)?([a-h])([2-7])|([KNBQR])([a-h1-8])?(x)?([a-h])([1-8]))([+#])?)(\\s)*(1-0|0-1|1/2-1/2)?";
+        
+String endPattern = "((([a-h1-8])?(x)?[a-h][18]=[NBQR]|O-O(-O)?|([a-h1-8])?(x)?([a-h])([2-7])|([KNBQR])([a-h1-8])?(x)?([a-h])([1-8]))([+#])?)(\\s)*((([a-h1-8])?(x)?[a-h][18]=[NBQR]|O-O(-O)?|([a-h1-8])?(x)?([a-h])([2-7])|([KNBQR])([a-h1-8])?(x)?([a-h])([1-8]))([+#])?)(\\s)*(1/2|0|1)\\-(1/2|0|1)";
+    
+//String moveEndPattern = "^([\\da-zA-Z\\-\\+#=]+)\\s+(1/2|0|1)\\-(1/2|0|1)$";
+ //String endPattern = "^([\\da-zA-Z\\-\\+#=]+)\\s+([\\da-zA-Z\\-\\+#=]+)\\s+(1/2|0|1)\\-(1/2|0|1)$";
+       
         Pattern ePattern = Pattern.compile(endPattern);
-
+        Pattern endMovePattern = Pattern.compile(moveEndPattern);
+        Pattern mPattern = Pattern.compile(movePattern);
         String emptyLinePattern = "^$";
         //end patterns
 
         scanner.useDelimiter("\n");
 
-        Matcher matcher, endMatcher;
+        Matcher matcher, endMatcher, endNext;
 
         TokenizedGame game = new TokenizedGame();
 
@@ -77,39 +85,54 @@ public class Tokenizer {
                     }
                     break;
                 case GAME:
-                    nextMove = scanner.next().trim();
+                   nextMove = scanner.next().trim();
+               
+                 
+                   
                     matcher = mPattern.matcher(nextMove);
                     endMatcher = ePattern.matcher(nextMove);
-
-                    if(matcher.matches()) {
-                        if(nextMove.matches(moveEndPattern)) {
-                            if(!game.getResult().equals(matcher.group(2))) {
-                                System.out.println("ERROR");  //throw exc
+                    endNext = endMovePattern.matcher(nextMove);
+                   
+                    if(matcher.matches() || endNext.matches() ) {
+                        if(nextMove.matches(moveEndPattern)) { // ostatni ruch
+                        /*
+                            if(!game.getResult().equals(endNext.group(2))) {
+                                //System.out.println("ERROR");  //throw exc
+                                 throw  new ParseException("Niepoprawne zakończenie partii: " + nextMove, 0);
                             }
-                            game.addMove(matcher.group(1));
+                        */ 
+                            game.addMove(endNext.group(1));
                             mode = DataType.OPTIONS;
                             scanner.useDelimiter("\n");
                             games.add(game);
                             game = new TokenizedGame();
                         } else {
-                            game.addMovePair(matcher.group(1), matcher.group(2));
+                            game.addMovePair(matcher.group(1), matcher.group(18));
                         }
                     } else if(endMatcher.matches()) {
-                        if(!game.getResult().equals(endMatcher.group(3)+"-"+endMatcher.group(4))) {
-                            System.out.println("ERROR"); //throw exc
+                        /*
+                        if(!game.getResult().equals(endMatcher.group(32)+"-"+endMatcher.group(34))) {
+                            //System.out.println("ERROR"); //throw exc
+                            throw  new ParseException("Niepoprawne zakończenie partii: " + nextMove, 0);
                         }
-                        game.addMovePair(endMatcher.group(1), endMatcher.group(2));
+                        */
+                        game.addMovePair(endMatcher.group(1), endMatcher.group(18));
                         mode = DataType.OPTIONS;
                         scanner.useDelimiter("\n");
                         games.add(game);
                         game = new TokenizedGame();
+                    }
+                    else // nie można było rozpoznać tokenu
+                    {
+                        System.out.println(nextMove.matches(moveEndPattern));
+                        throw new ParseException("Niepoprawny ruch: " + nextMove, 0);
                     }
                     break;
             }
 
         }
 
-
+       
         return games;
     }
 
