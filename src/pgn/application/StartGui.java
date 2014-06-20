@@ -18,6 +18,7 @@ public class StartGui extends PgnGui {
 
     protected File pgnFile;
     private JLabel label;
+    private JLabel tokenizerLabel;
 
     public StartGui(PGNtranslator application) {
         super(application);
@@ -28,8 +29,11 @@ public class StartGui extends PgnGui {
         fileChooser.setText("Wybierz plik...");
         label = new JLabel();
         label.setText("Wybierz plik '.pgn', który chcesz przetworzyć.");
+        //tokenizerLabel = newJLabel();
+        //tokenizerLabel.setText("Wynik .");
         main.add(fileChooser);
         main.add(label);
+        
 
         JToolBar toolBar = new JToolBar();
         toolBar.add(nextWindowBtn);
