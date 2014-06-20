@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.text.ParseException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,15 +23,21 @@ public class ParserGui extends PgnGui {
     private static final String PARSE = "PARSE";
     private static final String GAME_CHOOSE = "GAME_CHOOSE";
     private static final String ALL_GAMES = "wszystkie";
+    private static final int GAME_INFO_WIDTH = PgnGui.WIDTH-50;
+    private static final int GAME_INFO_HEIGHT = PgnGui.HEIGHT-140;
+    private static final int RESULT_HEIGHT = 100;
 
     protected java.util.List<TokenizedGame> games;
 
     private JButton parseBtn;
     private JComboBox gameChooser;
     private JLabel result;
+    private JScrollPane textScroll;
+    private JTextPane parsedGameInfo;
 
     public ParserGui(PGNtranslator application) {
         super(application);
+        this.setPreferredSize(null);
         JPanel main = new JPanel();
         JLabel label = new JLabel();
         label.setText("Możesz teraz rozpocząć parsowanie...");
@@ -46,10 +54,20 @@ public class ParserGui extends PgnGui {
 
         result = new JLabel();
 
+        parsedGameInfo = new JTextPane();
+        parsedGameInfo.setEditable(false);
+        parsedGameInfo.setContentType("text/html");
+
+        textScroll = new JScrollPane(parsedGameInfo);
+        textScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        textScroll.setPreferredSize(new Dimension(GAME_INFO_WIDTH, GAME_INFO_HEIGHT));
+        textScroll.setVisible(false);
+
         main.add(label);
         main.add(parseBtn);
         main.add(gameChooser);
         main.add(result);
+        main.add(textScroll);
 
         JToolBar toolBar = new JToolBar();
         toolBar.add(prevWindowBtn);
@@ -96,12 +114,23 @@ public class ParserGui extends PgnGui {
                         application.setParsedGame(selected.getGame());
                     }
                     result.setText("Parsowanie zakończone powodzeniem!");
+                    textScroll.setVisible(false);
                     nextWindowBtn.setVisible(true);
                 } catch (ParserException ex) {
-                    JOptionPane.showMessageDialog(this, "Game: "+ex.getGame().getWhite()+" vs "+ex.getGame().getBlack()
-                            +", move #"+ex.getMoveNum()+": "+ex.getMove()+" Error: "+ex.getMessage(), "Parser", JOptionPane.ERROR_MESSAGE);
+                    result.setText(" ");
+                    textScroll.setVisible(true);
+                    String game = ex.getGame().toHtmlString();
+                    Pattern p = Pattern.compile("("+ex.getMoveNum()+"\\.\\ "+ex.getMove()+" : [a-zA-Z0-9\\+\\=\\#]+|[a-zA-Z0-9\\+\\=\\#]+ : "+ex.getMove()+")<br>");
+                    Matcher m = p.matcher(game);
+                    if(m.find()) {
+                        game = game.substring(0, m.start())+"<span style='color: red'>"+game.substring(m.start(), m.end()-1)+"</span>"+game.substring(m.end());
+                    }
+                    game = "<html>Gra: "+ex.getGame().getWhite()+" vs "+ex.getGame().getBlack()+
+                            "<br>Ruch #"+ex.getMoveNum()+": "+ex.getMove()+"<br>Typ błędu:<p style='color: red'>"+ex.getMessage()+"</p>"
+                            +game.substring(6);
+
+                    parsedGameInfo.setText(game);
                     nextWindowBtn.setVisible(false);
-                    //jakis moze JTextArea do wyswietlania bledu(na czerwono..)
                 }
                 break;
             case GAME_CHOOSE:
@@ -109,4 +138,5 @@ public class ParserGui extends PgnGui {
                 break;
         }
     }
+
 }

@@ -50,7 +50,7 @@ public class SimulationPlayer implements ActionListener {
                 timer.stop();
             }
             else if(ex.isEnd()) {
-                String result = ((game.getResult()=="1-0") ? "Wygrał: "+game.getWhite() : ((game.getResult()=="0-1") ? "Wygrał: "+game.getBlack() : "Remis"));
+                String result = ((game.getResult().equals("1-0")) ? "Wygrał: "+game.getWhite() : ((game.getResult().equals("0-1")) ? "Wygrał: "+game.getBlack() : "Remis"));
                 JOptionPane.showMessageDialog(gui, "Koniec gry!\n"+result, game.getWhite()+" vs. "+game.getBlack(), JOptionPane.INFORMATION_MESSAGE);
                 timer.stop();
             }

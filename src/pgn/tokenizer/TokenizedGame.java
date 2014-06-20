@@ -174,4 +174,27 @@ public class TokenizedGame {
         }
         return result;
     }
+
+    public String toHtmlString() {
+        String result = "<html>";
+        result += ((event!=null) ? "<br>Event: "+event : "");
+        result += ((site!=null) ? "<br>Site: "+site : "");
+        result += ((date!=null) ? "<br>Date: "+date : "");
+        result += ((round!=0) ? "<br>Round: "+round : "");
+        result += ((white!=null) ? "<br>White: "+white : "");
+        result += ((black!=null) ? "<br>Black: "+black : "");
+        result += ((this.result!=null) ? "<br>Result: "+this.result : "");
+        result += ((ECO!=null) ? "<br>ECO: "+ECO : "");
+        result += ((Eco!=null) ? "<br>Eco: "+Eco : "");
+        result += ((whiteELO!=null) ? "<br>WhiteELO: "+whiteELO : "");
+        result += ((FEN!=null) ? "<br>FEN: "+FEN : "");
+        result += ((SetUp!=null) ? "<br>SetUp: "+SetUp : "");
+        result += ((EventDate!=null) ? "<br>EventDate: "+EventDate : "");
+
+        int i=1;
+        for(MovePair move : moves) {
+            result += "<br>"+i+++". "+move.getWhite()+((move.getBlack()!=null) ? " : "+move.getBlack() : "");
+        }
+        return result+"</html>";
+    }
 }

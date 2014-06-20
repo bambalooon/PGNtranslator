@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.text.ParseException;
 
 /**
@@ -27,6 +28,26 @@ import java.text.ParseException;
  * To change this template use File | Settings | File Templates.
  */
 public class ChessboardGui extends PgnGui {
+    private static class PlayerIcons {
+        public static final String directory = "media/";
+        public static BufferedImage play;
+        public static BufferedImage prev;
+        public static BufferedImage pause;
+        public static BufferedImage stop;
+        public static BufferedImage next;
+        static {
+            try {
+                play = ImageIO.read(new File(PlayerIcons.directory+"Play24.gif"));
+                prev = ImageIO.read(new File(PlayerIcons.directory+"StepBack24.gif"));
+                next = ImageIO.read(new File(PlayerIcons.directory+"StepForward24.gif"));
+                pause = ImageIO.read(new File(PlayerIcons.directory+"Pause24.gif"));
+                stop = ImageIO.read(new File(PlayerIcons.directory+"Stop24.gif"));
+            } catch (IOException e) {
+                //HUGE error...
+            }
+
+        }
+    }
     static final private String PLAY = "play";
     static final private String PAUSE = "pause";
     static final private String STOP = "stop";
@@ -85,14 +106,20 @@ public class ChessboardGui extends PgnGui {
                     try {
                         application.getSimulation().drawNextBoard();
                     } catch (GameProgressException ex) {
-                        TokenizedGame game = ((ComboBoxGame)gameChooser.getSelectedItem()).getGame();
+                        TokenizedGame game = application.getSimulation().getGame();
                         if(ex.isCheckMate()) {
                             String player = ((ex.getPlayer()==ChessPlayer.WHITE) ? game.getWhite() : game.getBlack());
                             JOptionPane.showMessageDialog(this, "Szach mat!\nWygrał "+player, game.getWhite()+" vs. "+game.getBlack(), JOptionPane.INFORMATION_MESSAGE);
+                            if(simPlayer!=null) {
+                                simPlayer.stop();
+                            }
                         }
                         else if(ex.isEnd()) {
-                            String result = ((game.getResult()=="1-0") ? "Wygrał: "+game.getWhite() : ((game.getResult()=="0-1") ? "Wygrał: "+game.getBlack() : "Remis"));
+                            String result = ((game.getResult().equals("1-0")) ? "Wygrał: "+game.getWhite() : ((game.getResult().equals("0-1")) ? "Wygrał: "+game.getBlack() : "Remis"));
                             JOptionPane.showMessageDialog(this, "Koniec gry!\n"+result, game.getWhite()+" vs. "+game.getBlack(), JOptionPane.INFORMATION_MESSAGE);
+                            if(simPlayer!=null) {
+                                simPlayer.stop();
+                            }
                         }
                     }
                     break;
@@ -116,8 +143,7 @@ public class ChessboardGui extends PgnGui {
                     if(simPlayer!=null) {
                         simPlayer.stop();
                     }
-                    cbgame = (ComboBoxGame) gameChooser.getSelectedItem();
-                    application.createGameSimulation(boardPanel, cbgame.getGame());
+                    application.createGameSimulation(boardPanel, application.getSimulation().getGame());
                     simPlayer = null;
                     playBtn.setVisible(true);
                     pauseBtn.setVisible(false);
@@ -136,35 +162,42 @@ public class ChessboardGui extends PgnGui {
     protected void addPlayButtons(JToolBar toolBar) {
         JButton button;
 
-        prevBtn = new JButton();
+
+        ImageIcon prevIcon = new ImageIcon(PlayerIcons.prev);
+        ImageIcon nextIcon = new ImageIcon(PlayerIcons.next);
+        ImageIcon playIcon = new ImageIcon(PlayerIcons.play);
+        ImageIcon pauseIcon = new ImageIcon(PlayerIcons.pause);
+        ImageIcon stopIcon = new ImageIcon(PlayerIcons.stop);
+
+        prevBtn = new JButton(prevIcon);
         prevBtn.addActionListener(this);
         prevBtn.setActionCommand(PREV);
-        prevBtn.setText("PREV");
+        prevBtn.setText("");
         toolBar.add(prevBtn);
 
-        playBtn = new JButton();
+        playBtn = new JButton(playIcon);
         playBtn.addActionListener(this);
         playBtn.setActionCommand(PLAY);
-        playBtn.setText("PLAY");
+        playBtn.setText("");
         toolBar.add(playBtn);
 
-        pauseBtn = new JButton();
+        pauseBtn = new JButton(pauseIcon);
         pauseBtn.addActionListener(this);
         pauseBtn.setActionCommand(PAUSE);
-        pauseBtn.setText("PAUSE");
+        pauseBtn.setText("");
         pauseBtn.setVisible(false);
         toolBar.add(pauseBtn);
 
-        stopBtn = new JButton();
+        stopBtn = new JButton(stopIcon);
         stopBtn.addActionListener(this);
         stopBtn.setActionCommand(STOP);
-        stopBtn.setText("STOP");
+        stopBtn.setText("");
         toolBar.add(stopBtn);
 
-        nextBtn = new JButton();
+        nextBtn = new JButton(nextIcon);
         nextBtn.addActionListener(this);
         nextBtn.setActionCommand(NEXT);
-        nextBtn.setText("NEXT");
+        nextBtn.setText("");
         toolBar.add(nextBtn);
 
 
