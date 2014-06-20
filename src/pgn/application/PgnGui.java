@@ -38,12 +38,12 @@ public abstract class PgnGui extends JFrame implements ActionListener {
         prevWindowBtn = new JButton();
         prevWindowBtn.addActionListener(this);
         prevWindowBtn.setActionCommand(PREV);
-        prevWindowBtn.setText("PREV");
+        prevWindowBtn.setText("WSTECZ");
 
         nextWindowBtn = new JButton();
         nextWindowBtn.addActionListener(this);
         nextWindowBtn.setActionCommand(NEXT);
-        nextWindowBtn.setText("NEXT");
+        nextWindowBtn.setText("DALEJ");
     }
 
     public void actionPerformed(ActionEvent e) {
